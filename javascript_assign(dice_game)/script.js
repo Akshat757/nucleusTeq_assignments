@@ -21,6 +21,20 @@ const diceImages = [
     'images/dice-6-b.svg'
 ];
 
+// Disable player name input fields
+function disablePlayerNameInputs() {
+    document.querySelectorAll('.player-name-input').forEach(input => {
+        input.disabled = true; // Disable the input field
+    });
+}
+
+// Enable player name input fields
+function enablePlayerNameInputs() {
+    document.querySelectorAll('.player-name-input').forEach(input => {
+        input.disabled = false; // Enable the input field
+    });
+}
+
 // Game Initialization
 function init() {
     scores = [0, 0];
@@ -33,6 +47,7 @@ function init() {
     players.forEach(player => player.classList.remove('active'));
     players[0].classList.add('active');
     winnerOverlay.style.display = 'none';
+    enablePlayerNameInputs(); // Enable inputs for editing
 }
 
 // Switch Player
@@ -61,6 +76,8 @@ rollBtn.addEventListener('click', () => {
     } else {
         switchPlayer();
     }
+
+    disablePlayerNameInputs(); // Disable inputs after the first roll
 });
 
 // Save Score

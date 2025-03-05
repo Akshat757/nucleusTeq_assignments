@@ -34,11 +34,11 @@ body {
 
 .player {
     background: rgba(255, 255, 255, 0.9);
-    padding: 20px; /* Reduced padding */
+    padding: 20px; 
     border-radius: 15px;
     transition: transform 0.3s ease;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    margin-top: 20px; /* Added margin on top */
+    margin-top: 20px; 
 }
 
 .player.active {
@@ -81,11 +81,8 @@ input.player-name-input:focus {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Add this to your existing CSS */
-
-/* Updated Current Score Box */
 .current-score-box {
-    background: #ff6b6b; /* Changed to a more visible color */
+    background: #ff6b6b; 
     padding: 15px;
     border-radius: 10px;
     color: white;
@@ -157,19 +154,19 @@ input.player-name-input:focus {
     box-shadow: 0 5px 15px rgba(78, 205, 196, 0.4);
 }
 
-.btn-reset {
-    position: absolute; /* Remove this */
-    top: 20px; /* Remove this */
-    right: 20px; /* Remove this */
-    background: rgba(255, 255, 255, 0.2); /* Remove this */
-    color: white; /* Remove this */
-    padding: 10px 20px; /* Remove this */
-    z-index: 10; /* Remove this */
-}
+/* .btn-reset {
+    position: absolute; 
+    top: 20px; 
+    right: 20px; 
+    background: rgba(255, 255, 255, 0.2); 
+    color: white; 
+    padding: 10px 20px;
+    z-index: 10; 
+} */
 
-/* Add new styles for the reset button */
+
 .btn-reset {
-    background: #2d3436; /* Dark gray color */
+    background: #2d3436;
     color: white;
 }
 
@@ -178,7 +175,6 @@ input.player-name-input:focus {
     box-shadow: 0 5px 15px rgba(45, 52, 54, 0.4);
 }
 
-/* Added Saved Score Label */
 .saved-score-label {
     font-size: 1.2rem;
     color: #2d3436;
@@ -217,7 +213,7 @@ input.player-name-input:focus {
 }
 
 .btn-play-again {
-    background: #ff6b6b; /* Red color to match the theme */
+    background: #ff6b6b;
     color: white;
     padding: 15px 40px;
     border: none;
@@ -234,6 +230,13 @@ input.player-name-input:focus {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
 }
+
+input.player-name-input:disabled {
+    background-color: #f0f0f0; 
+    color: #555; 
+    cursor: not-allowed;
+}
+
 
 @keyframes diceShake {
     0% { transform: rotate(0deg) scale(1); }
