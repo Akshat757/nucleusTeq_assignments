@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="loading-bar"></div>
+
+        <!-- Name Input Screen -->
+        <div class="screen name-screen active">
+            <h1>Welcome to Quiz Game</h1>
+            <div class="input-group">
+                <input type="text" id="player-name" placeholder="Enter your name" maxlength="20">
+                <button class="btn submit-name">Continue</button>
+            </div>
+        </div>
+
+        <!-- Start Screen -->
+        <div class="screen start-screen">
+            <h1>Quiz Game</h1>
+            <div class="category-select">
+                <h2>Select Category</h2>
+                <div class="categories"></div>
+            </div>
+            <div class="difficulty-select">
+                <h2>Select Difficulty</h2>
+                <div class="difficulties"></div>
+            </div>
+            <button class="btn start-btn">Start Game</button>
+        </div>
+
+        <!-- Game Screen -->
+        <div class="screen game-screen">
+            <button class="btn exit-btn">Exit Quiz</button>
+            <div class="header">
+                <div class="player-info">
+                    <span class="player-name"></span>
+                    <span class="score">Score: <span>0</span></span>
+                </div>
+                <div class="timer">
+                    <div class="timer-progress"></div>
+                    <span class="time-left">15</span>
+                </div>
+            </div>
+            <div class="question-container">
+                <h2 class="question-number">Question 1</h2>
+                <h3 class="question"></h3>
+                <div class="options"></div>
+            </div>
+        </div>
+
+        <!-- End Screen -->
+        <div class="screen end-screen">
+            <div class="end-content">
+                <h1>Game Over!</h1>
+                <div class="final-score">
+                    <span>Your Score:</span>
+                    <span class="score-value">0</span>
+                </div>
+                <div class="scoreboard">
+                    <h2>Scoreboard</h2>
+                    <div class="scores"></div>
+                </div>
+                <button class="btn play-again-btn">Play Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,361 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: #1a1a2e;
+    color: #fff;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.screen {
+    display: none;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.screen.active {
+    display: flex;
+}
+
+h1, h2 {
+    text-align: center;
+    color: #e94560;
+}
+
+.btn {
+    background: #e94560;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 18px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+    background: #ff4d6d;
+}
+
+
+.categories, .difficulties {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.categories button, .difficulties button {
+    background: #162447;
+    color: white;
+    border: 2px solid #1f4068;
+    padding: 15px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.categories button.active, .difficulties button.active {
+    border-color: #e94560;
+    background: #1f4068;
+    transform: scale(1.05);
+}
+
+/* Loading Bar */
+.loading-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: #4ecdc4;
+    width: 0%;
+    transition: width 0.3s ease;
+    z-index: 1000;
+}
+
+/* Name Input Screen */
+.name-screen {
+    text-align: center;
+    gap: 30px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+#player-name {
+    padding: 15px;
+    border-radius: 25px;
+    border: 2px solid #1f4068;
+    background: #162447;
+    color: white;
+    font-size: 16px;
+    text-align: center;
+}
+
+/* Player Info */
+.player-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.player-name {
+    color: #4ecdc4;
+    font-weight: bold;
+}
+
+/* Timer */
+.timer {
+    position: relative;
+    width: 100px;
+    height: 100px;
+}
+
+.timer-progress {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: #162447;
+    position: relative;
+    clip: rect(0px, 100px, 100px, 50px);
+}
+
+.timer-progress::after {
+    content: '';
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    background: #1a1a2e;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.time-left {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    font-weight: bold;
+    color: #e94560;
+}
+
+@keyframes countdown {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Question Container */
+.question-container {
+    background: #162447;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+.question-number {
+    color: #4ecdc4;
+    margin-bottom: 15px;
+}
+
+.question {
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+.options {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+}
+
+.options button {
+    position: relative;
+    background: #1f4068;
+    color: white;
+    border: none;
+    padding: 15px 20px 15px 60px;
+    border-radius: 10px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.options button::before {
+    content: attr(data-option);
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #162447;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    z-index: 1;
+}
+
+.options button:hover {
+    transform: translateX(10px);
+}
+
+.options button.correct {
+    background: #4ecdc4 !important;
+    color: #162447;
+}
+
+.options button.incorrect {
+    background: #e94560 !important;
+    color: white;
+}
+
+/* End Screen */
+.end-content {
+    background: #162447;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.final-score {
+    margin: 30px 0;
+    font-size: 2.5em;
+    color: #4ecdc4;
+}
+
+.final-score .score-value {
+    display: block;
+    font-size: 1.5em;
+    margin-top: 10px;
+    color: #e94560;
+}
+
+/* Scoreboard Table Styles */
+.scoreboard-group table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    background: #162447;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.scoreboard-group th,
+.scoreboard-group td {
+    padding: 12px;
+    text-align: left;
+}
+
+.scoreboard-group th {
+    background: #1f4068;
+    color: #4ecdc4;
+}
+
+.scoreboard-group tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.scoreboard-group tr:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.scoreboard {
+    margin-top: 30px;
+    background: #1f4068;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.scoreboard-group {
+    margin-bottom: 25px;
+}
+
+.scoreboard-group h3 {
+    color: #4ecdc4;
+    margin-bottom: 15px;
+}
+
+.score-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.score-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background: #162447;
+    border-radius: 10px;
+}
+
+.score-item .name {
+    color: #4ecdc4;
+}
+
+.score-item .score {
+    color: #e94560;
+    font-weight: bold;
+}
+
+.exit-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    font-size: 14px;
+    background: #ff4d6d !important;
+    max-width: 120px;
+}
+
+@media (max-width: 600px) {
+    .categories, .difficulties {
+        grid-template-columns: 1fr;
+    }
+    
+    .question-container {
+        padding: 20px;
+    }
+    
+    .timer {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .final-score {
+        font-size: 2em;
+    }
+    
+    .exit-btn {
+        top: 10px;
+        right: 10px;
+    }
+}
