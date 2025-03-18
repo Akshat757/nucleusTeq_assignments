@@ -1,0 +1,77 @@
+q1.> Explain the difference between primitive and reference data types with examples.
+     
+Ans: Aspect                    Primitive Data Types                       Reference Data Types    
+
+     Storage                   Store actual values directly in memory     Store memory addresses (references)      
+     Data Type Examples        int, float, char, boolean                  String, Array, Class, Object             
+     Memory Usage              Fixed size, efficient memory management    Variable size, may use more memory       
+     Modification Effect       Changes only affect the variable itself    Changes affect the object it references  
+     Comparison                Compares actual values                     Compares memory addresses                
+     Null Assignment           Not applicable, primitives can't be null   Can be assigned null                     
+     Default Values            Zero (e.g., 0, 0.0, false)                 null by default                          
+     Example                   int a = 5; int b = a;                      String s1 = "Hello"; String s2 = s1;     
+
+
+q2.> Explain the concept of encapsulation with a suitable example.
+
+Ans: Encapsulation is one of the core principles of Object-Oriented Programming (OOP). 
+     It refers to the practice of hiding the internal details of a class and restricting 
+     access to certain components using private variables and public getter and setter methods.
+
+    example:
+    public class Person {
+        private String name;
+
+        public String getName() {
+            return name;
+        }
+        public void setName(String name) {
+            this.name = name;
+        }
+    }
+
+    public class Main {
+        public static void main(String[] args) {
+            Person p = new Person();
+            p.setName("John");
+            System.out.println("Name: " + p.getName());
+        }
+    }
+
+
+
+q3.> Explain the concept of interfaces and abstract classes with examples.
+
+Ans: Abstract Classes vs Interfaces 
+     1.  Abstract Class:
+
+        Can have both abstract (without implementation) and concrete (with implementation) methods.
+        Can have instance variables and constructors.
+        Supports single inheritance.
+        Used when we need partial abstraction (some common behavior + abstract methods).
+        Example:
+
+        abstract class Vehicle {
+            abstract void start();
+            void stop() { System.out.println("Stopping vehicle."); }
+        }
+        class Car extends Vehicle {
+            void start() { System.out.println("Car is starting."); }
+        }
+
+     2.  Interface:
+
+        Only contains abstract methods (before Java 8), but can have default & static methods (Java 8+).
+        No instance variables, only static final constants.
+        Supports multiple inheritance (a class can implement multiple interfaces).
+        Used for 100% abstraction and defining contracts for multiple classes.
+
+        Example:
+
+        interface Vehicle {
+            void start();
+            default void stop() { System.out.println("Stopping vehicle."); }
+        }
+        class Bike implements Vehicle {
+            public void start() { System.out.println("Bike is starting."); }
+        }
