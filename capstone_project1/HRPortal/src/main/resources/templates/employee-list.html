@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Employee List</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+<div class="employee-list-container">
+    <!-- Header Section -->
+    <div class="table-header">
+        <h2><i class="fas fa-users"></i> Employee Management</h2>
+        <div class="header-actions">
+            <a href="/employees/new" class="add-btn">
+                <i class="fas fa-plus"></i> Add Employee
+            </a>
+            <form th:action="@{/employees/logout}" method="post" class="logout-form">
+                <button type="submit" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Table Section -->
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Department</th>
+            <th>Email</th>
+            <th>Salary</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="employee : ${employees}">
+            <td th:text="${employeeStat.count}"></td> <!-- Display sequential number -->
+<!--            <td th:text="ABC${employee.id}"></td>-->
+            <td th:text="${employee.name}"></td>
+            <td th:text="${employee.department}"></td>
+            <td th:text="${employee.email}"></td>
+            <td th:text="${'$' + employee.salary}"></td>
+            <td>
+                <div class="action-links">
+                    <a th:href="@{/employees/edit/{id}(id=${employee.id})}">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <a th:href="@{/employees/delete/{id}(id=${employee.id})}">
+                        <i class="fas fa-trash"></i> Delete
+                    </a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

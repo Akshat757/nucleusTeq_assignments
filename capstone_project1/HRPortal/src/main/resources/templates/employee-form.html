@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Employee Form</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+<div class="employee-form-container">
+    <h2 style="padding-bottom: 20px;" th:text="${employee.id} ? '✏️ Edit Employee' : '👤 Add Employee'"></h2>
+    <form th:action="@{/employees/save}" method="post" th:object="${employee}">
+        <input type="hidden" th:field="*{id}">
+
+        <div class="form-group">
+            <input type="text" th:field="*{name}" placeholder=" " required>
+            <label><i class="fas fa-user"></i> Full Name</label>
+        </div>
+
+        <div class="form-group">
+            <input type="text" th:field="*{department}" placeholder=" " required>
+            <label><i class="fas fa-building"></i> Department</label>
+        </div>
+
+        <div class="form-group">
+            <input type="email" th:field="*{email}" placeholder=" " required>
+            <label><i class="fas fa-envelope"></i> Email</label>
+        </div>
+
+        <div class="form-group">
+            <input type="number" th:field="*{salary}" step="0.01" placeholder=" " required>
+            <label><i class="fas fa-dollar-sign"></i> Salary</label>
+        </div>
+
+        <button type="submit" class="submit-btn">
+            <i class="fas fa-save"></i> Save Employee
+        </button>
+    </form>
+</div>
+</body>
+</html>

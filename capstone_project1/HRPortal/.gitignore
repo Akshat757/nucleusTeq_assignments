@@ -1,0 +1,68 @@
+### Java ###
+*.class
+*.log
+*.ctxt
+*.jar
+*.war
+*.ear
+*.nar
+bin/
+build/
+out/
+
+### Maven ###
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/wrapper/maven-wrapper.jar
+
+### IDE ###
+# IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+.idea_modules/
+
+# VS Code
+.vscode/
+!.vscode/settings.json
+
+### Database ###
+*.db
+*.h2.db
+*.mv.db
+
+### Environment ###
+.env
+*.env
+application.properties  # Add this line
+application-*.properties
+
+### Logs ###
+logs/
+*.log
+
+### System Files ###
+.DS_Store
+Thumbs.db
+
+### Build ###
+.gradle/
+.mvn/tmp/
+
+### Test ###
+**/test-results/
+**/jacoco.exec
+
+### Others ###
+*.swp
+*.swo
+*~
+*.bak
+*.orig
