@@ -1,199 +1,197 @@
-/* Global Styles */
+/* General Styles */
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
 html, body {
     font-family: 'Poppins', sans-serif;
-    background: #f7f7f7;
+    background-image: linear-gradient(to right, #ff8177 0%, #ff867a 0%, #ff8c7f 21%, #f99185 52%, #cf556c 78%, #b12a5b 100%);
     color: #333;
-    line-height: 1.6;
+    min-height: 100vh;
     overflow-x: hidden;
 }
 
-/* Common Containers */
-.container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+/* Navbar */
+.navbar {
+    background-color: #005f73;
+    padding: 15px 40px;
+    border-radius: 12px;
+    margin-bottom: 20px;
 }
 
-/* Typography */
-h1, h2, h3, h4, h5, h6 {
+.navbar-brand {
+    color: #ea0909 !important;
     font-weight: 600;
-    margin-bottom: 1rem;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
-}
-
-p {
-    margin-bottom: 1rem;
-}
-
-/* Links */
-a {
-    color: #007bff;
-    text-decoration: none;
+    font-size: 1.8rem;
     transition: color 0.3s ease;
 }
 
-a:hover {
-    color: #0056b3;
+.navbar-brand:hover {
+    color: #0b8dc5 !important;
 }
 
-/* Navbar - Generic */
-.navbar {
-    background-color: #343a40;
-    padding: 0.75rem 1rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+/* Tab Navigation */
+.nav-tabs {
+    margin-bottom: 20px;
+    justify-content: center;
 }
 
-.navbar a.navbar-brand {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #fff;
+.nav-tabs .nav-link {
+    font-weight: 600;
+    transition: color 0.3s ease;
 }
 
-.navbar .nav-link {
-    color: #ddd;
-    margin-left: 15px;
-    transition: color 0.3s;
-}
-
-.navbar .nav-link:hover {
-    color: #fff;
-}
-
-/* Footer */
-footer {
-    background-color: #343a40;
-    color: #ccc;
-    text-align: center;
-    padding: 1rem 0;
-    margin-top: 30px;
-    font-size: 0.9rem;
-}
-
-/* Buttons */
-.btn {
-    display: inline-block;
-    font-size: 1rem;
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 50px;
-    background-color: #007bff;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.btn:hover {
-    background-color: #0056b3;
-    transform: scale(1.05);
-}
-
-.btn:active {
-    transform: scale(0.95);
+.nav-tabs .nav-link:hover {
+    color: #0892cd !important;
 }
 
 /* Forms */
-.form-control {
-    display: block;
-    width: 100%;
-    padding: 0.75rem;
-    margin-bottom: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    transition: border-color 0.3s ease;
-}
-
-.form-control:focus {
-    border-color: #007bff;
-    outline: none;
-}
-
-/* Modal Styling (common across pages) */
-.modal-content {
+form {
+    background-color: rgba(225, 31, 31, 0.9);
+    padding: 2rem;
+    margin: 2rem auto;
     border-radius: 10px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    animation: fadeInUp 1s ease;
 }
 
-.modal-header {
-    background-color: #007bff;
-    color: #fff;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+form label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
 }
 
-.modal-body {
-    background-color: #fff;
+form input, form select, form button {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #c12e2e;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
 }
 
-.modal-footer {
-    background-color: #f1f1f1;
+form input:focus, form select:focus {
+    border-color: #00796b;
+    outline: none;
+    transform: scale(1.02);
+}
+
+form button {
+    background-color: #00796b;
+    color: #8a5252;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: #00695c;
+    transform: scale(1.05);
+}
+
+/* Buttons */
+.btn-custom {
+    border-radius: 30px;
+    font-weight: 600;
+    padding: 12px 24px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-custom-primary {
+    background-color: #00796b;
+    border: none;
+    color: #6c2f2f;
+}
+
+.btn-custom-primary:hover {
+    background-color: #00695c;
+    transform: scale(1.07);
+}
+
+.btn-custom-success {
+    background-color: #2a9d8f;
+}
+
+.btn-custom-success:hover {
+    background-color: #21867b;
+}
+
+/* Utility Classes */
+.text-center {
+    text-align: center;
+}
+
+.mt-20 {
+    margin-top: 20px;
 }
 
 /* Animations */
-@keyframes fadeIn {
+@keyframes fadeInUp {
     from {
+        transform: translateY(30px);
         opacity: 0;
-        transform: translateY(20px);
     }
     to {
-        opacity: 1;
         transform: translateY(0);
+        opacity: 1;
     }
 }
 
-.fade-in {
-    animation: fadeIn 0.8s ease-in-out;
-}
-
-/* Loading Spinner (if needed) */
-.loader {
-    border: 8px solid rgba(0,0,0,0.1);
-    border-top: 8px solid #007bff;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    animation: spin 1s linear infinite;
-    margin: 50px auto;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Responsive Layout */
-@media (max-width: 992px) {
-    .container {
-        width: 95%;
-    }
-    .navbar a.navbar-brand {
-        font-size: 1.3rem;
-    }
-}
-
+/* Responsive Design */
 @media (max-width: 768px) {
     .navbar {
         flex-direction: column;
-        align-items: center;
+        padding: 10px;
     }
-    .navbar .nav-link {
-        margin-left: 0;
-        margin-top: 5px;
+
+    .navbar-brand {
+        font-size: 1.4rem;
+        margin-bottom: 15px;
+    }
+
+    .container {
+        padding: 20px 10px;
+    }
+
+    .btn-custom {
+        padding: 10px 18px;
+    }
+
+    .nav-tabs {
+        display: block;
+        text-align: center;
+    }
+
+    .nav-tabs .nav-link {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    form {
+        padding: 1.5rem;
+    }
+
+    form input, form select, form button {
+        padding: 10px;
     }
 }
 
 @media (max-width: 480px) {
-    h1, h2, h3, h4, h5 {
+    .navbar-brand {
         font-size: 1.2rem;
     }
-    .btn {
-        padding: 0.5rem 1rem;
-        font-size: 0.9rem;
+
+    h1, h2, h3 {
+        font-size: 1.4rem;
+    }
+
+    .btn-custom {
+        padding: 8px 16px;
     }
 }

@@ -1,4 +1,5 @@
 // js/auth.js
+/* global Swal */
 import { apiPost } from "./api.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -13,12 +14,31 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await apiPost("auth/login", { email, password });
             localStorage.setItem("user", JSON.stringify(data));
             if (data.role === "CUSTOMER") {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Login Successful',
+                    text: 'Your account has been created!',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
                 window.location.href = "customer-dashboard.html";
             } else if (data.role === "OWNER") {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Login Successful',
+                    text: 'Your account has been created!',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
                 window.location.href = "owner-dashboard.html";
             }
         } catch (error) {
-            alert("Login failed: " + error.message);
+            Swal.fire({
+                icon: 'error',
+                title: 'Login Error',
+                text: error.message || 'Login failed. Please try again.'
+            });
+
         }
     });
 
@@ -31,12 +51,31 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await apiPost("auth/register", { email, password, role });
             localStorage.setItem("user", JSON.stringify(data));
             if (data.role === "CUSTOMER") {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Registration Successful',
+                    text: 'Your account has been created!',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
                 window.location.href = "customer-dashboard.html";
             } else if (data.role === "OWNER") {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Registration Successful',
+                    text: 'Your account has been created!',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
                 window.location.href = "owner-dashboard.html";
             }
         } catch (error) {
-            alert("Registration failed: " + error.message);
+            Swal.fire({
+                icon: 'error',
+                title: 'Registration Error',
+                text: error.message || 'Registration failed. Please try again.'
+            });
+
         }
     });
 });

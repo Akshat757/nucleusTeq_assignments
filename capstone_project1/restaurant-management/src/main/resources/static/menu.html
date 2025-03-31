@@ -7,11 +7,20 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/customer.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="restaurants.html">Back to Restaurants</a>
-    <a class="nav-link" href="index.html">Logout</a>
+    <a class="navbar-brand" href="customer-dashboard.html">Back</a>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="cart.html">Cart</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="index.html">Logout</a>
+        </li>
+    </ul>
 </nav>
 <div class="container mt-4">
     <h2 id="restaurantName">Restaurant Menu</h2>
@@ -24,6 +33,7 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
+    /* global Swal */
     function getQueryParam(param) {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(param);
@@ -32,24 +42,33 @@
     document.addEventListener('DOMContentLoaded', async function() {
         const restaurantId = getQueryParam('restaurantId');
         if (!restaurantId) {
-            alert("Restaurant ID not found.");
+            await Swal.fire({
+                icon: 'error',
+                title: 'Missing Restaurant',
+                text: 'Restaurant ID not found'
+            });
             window.location.href = "restaurants.html";
             return;
         }
-        // Fetch restaurant details
+
         try {
-            const res = await fetch(`http://localhost:8081/api/restaurants/${restaurantId}`);
-            const restaurant = await res.json();
-            document.getElementById('restaurantName').textContent = restaurant.name + " Menu";
-        } catch (err) {
-            console.error(err);
-        }
-        // Fetch menu items for this restaurant
-        try {
-            const res = await fetch(`http://localhost:8081/api/menuitems/restaurant/${restaurantId}`);
-            const menuItems = await res.json();
+            // Fetch restaurant details
+            const resRestaurant = await fetch(`http://localhost:8081/api/restaurants/${restaurantId}`);
+            if (!resRestaurant.ok) throw new Error('Failed to fetch restaurant details');
+            const restaurant = await resRestaurant.json();
+            document.getElementById('restaurantName').textContent = `${restaurant.name} Menu`;
+
+            // Fetch menu items
+            const resMenu = await fetch(`http://localhost:8081/api/menuitems/restaurant/${restaurantId}`);
+            if (!resMenu.ok) throw new Error('Failed to load menu items');
+            const menuItems = await resMenu.json();
             renderMenuItems(menuItems);
         } catch (err) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: err.message || 'Failed to load restaurant information'
+            });
             console.error(err);
         }
     });
@@ -57,19 +76,26 @@
     function renderMenuItems(items) {
         const container = document.getElementById('menuContainer');
         container.innerHTML = '';
+
         items.forEach(item => {
             const div = document.createElement('div');
             div.className = 'col-md-4 mb-3';
             div.innerHTML = `
-          <div class="card">
-            <img src="${item.imageUrl || 'assets/images/default.jpg'}" class="card-img-top" alt="${item.name}">
-            <div class="card-body">
-              <h5 class="card-title">${item.name}</h5>
-              <p class="card-text">${item.description || ''}</p>
-              <p class="card-text"><strong>$${item.price.toFixed(2)}</strong></p>
-              <button class="btn btn-success" onclick="addToCart(${item.id})">Add to Cart</button>
+            <div class="card">
+                <img src="${item.imageUrl || 'assets/images/default.jpg'}"
+                     class="card-img-top"
+                     alt="${item.name}"
+                     style="height: 200px; object-fit: cover">
+                <div class="card-body">
+                    <h5 class="card-title">${item.name}</h5>
+                    <p class="card-text text-muted">${item.description || ''}</p>
+                    <p class="card-text"><strong>$${item.price.toFixed(2)}</strong></p>
+                    <button class="btn btn-success"
+                            onclick="addToCart(${item.id})">
+                        Add to Cart
+                    </button>
+                </div>
             </div>
-          </div>
         `;
             container.appendChild(div);
         });
@@ -77,24 +103,45 @@
 
     async function addToCart(menuItemId) {
         const user = JSON.parse(localStorage.getItem('user'));
-        if (!user || !user.id) {
-            alert("Please login first.");
+        if (!user?.id) {
+            await Swal.fire({
+                icon: 'warning',
+                title: 'Login Required',
+                text: 'Please login to add items to cart'
+            });
             return;
         }
-        const data = { customerId: user.id, itemId: menuItemId, quantity: 1 };
+
         try {
-            const res = await fetch('http://localhost:8081/api/cart/add', {
+            const response = await fetch('http://localhost:8081/api/cart/add', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+                body: JSON.stringify({
+                    customerId: user.id,
+                    itemId: menuItemId,
+                    quantity: 1
+                })
             });
-            const response = await res.json();
-            alert("Item added to cart!");
+
+            if (!response.ok) throw new Error('Failed to add item to cart');
+
+            await Swal.fire({
+                icon: 'success',
+                title: 'Item Added!',
+                text: 'The item has been added to your cart',
+                timer: 1500,
+                showConfirmButton: false
+            });
         } catch (err) {
-            console.error("Error adding to cart:", err);
-            alert("Failed to add item to cart.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Cart Error',
+                text: err.message || 'Failed to update your cart'
+            });
+            console.error("Cart error:", err);
         }
     }
+
 </script>
 </body>
 </html>

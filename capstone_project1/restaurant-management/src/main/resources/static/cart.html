@@ -7,6 +7,9 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/customer.css">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -16,7 +19,7 @@
 <div class="container mt-4">
     <h2>Your Cart</h2>
     <div id="cartContainer">
-        <!-- Cart items rendered here -->
+        <!-- Cart items will be rendered here -->
     </div>
     <h3 id="cartTotal">Total: $0.00</h3>
     <button class="btn btn-primary" onclick="checkout()">Place Order</button>
@@ -26,6 +29,7 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
+    /* global Swal */
     document.addEventListener('DOMContentLoaded', function() {
         loadCart();
     });
@@ -33,8 +37,13 @@
     async function loadCart() {
         const user = JSON.parse(localStorage.getItem('user'));
         if (!user || !user.id) {
-            alert("Please login first.");
-            window.location.href = "index.html";
+            Swal.fire({
+                icon: 'warning',
+                title: 'Not Logged In',
+                text: 'Please login first.'
+            }).then(() => {
+                window.location.href = "index.html";
+            });
             return;
         }
         try {
@@ -43,6 +52,11 @@
             renderCartItems(cartItems);
         } catch (err) {
             console.error("Error loading cart:", err);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Error loading cart. Please try again later.'
+            });
         }
     }
 
@@ -52,13 +66,24 @@
         let total = 0;
         items.forEach(item => {
             total += item.menuItem.price * item.quantity;
+            // Create a card for each cart item with quantity controls
             const div = document.createElement('div');
-            div.className = 'card mb-2';
+            div.className = 'card mb-2 fade-in-up';
             div.innerHTML = `
           <div class="card-body">
             <h5 class="card-title">${item.menuItem.name}</h5>
-            <p class="card-text">Price: $${item.menuItem.price.toFixed(2)} x ${item.quantity}</p>
-            <button class="btn btn-danger" onclick="removeFromCart(${item.id})">Remove</button>
+            <p class="card-text">Price: $${item.menuItem.price.toFixed(2)}</p>
+            <div class="input-group mb-2" style="max-width: 120px;">
+              <div class="input-group-prepend">
+                <button class="btn btn-outline-secondary" type="button" onclick="decreaseQuantity(${item.id})">-</button>
+              </div>
+              <input type="number" class="form-control text-center" id="quantity-${item.id}" value="${item.quantity}" min="1">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" onclick="increaseQuantity(${item.id})">+</button>
+              </div>
+            </div>
+            <button class="btn btn-info btn-sm" onclick="updateCartItem(${item.id})">Update Quantity</button>
+            <button class="btn btn-danger btn-sm" onclick="removeFromCart(${item.id})">Remove</button>
           </div>
         `;
             container.appendChild(div);
@@ -66,87 +91,111 @@
         document.getElementById('cartTotal').textContent = `Total: $${total.toFixed(2)}`;
     }
 
-    async function removeFromCart(cartId) {
-        try {
-            await fetch(`http://localhost:8081/api/cart/remove/${cartId}`, { method: 'DELETE' });
-            loadCart();
-        } catch (err) {
-            console.error("Error removing item:", err);
+    // Increase or decrease quantity functions
+    function increaseQuantity(cartId) {
+        const input = document.getElementById(`quantity-${cartId}`);
+        if (input) {
+            input.value = parseInt(input.value) + 1;
         }
     }
 
+    function decreaseQuantity(cartId) {
+        const input = document.getElementById(`quantity-${cartId}`);
+        if (input && parseInt(input.value) > 1) {
+            input.value = parseInt(input.value) - 1;
+        }
+    }
+
+    // Update cart item quantity in the backend
+    async function updateCartItem(cartId) {
+        const input = document.getElementById(`quantity-${cartId}`);
+        const newQuantity = parseInt(input.value);
+        if (newQuantity < 1) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Invalid Quantity',
+                text: 'Quantity must be at least 1.'
+            });
+            return;
+        }
+        try {
+            // Assumes you have an endpoint for updating quantity; adjust URL as needed.
+            const res = await fetch(`http://localhost:8081/api/cart/update/${cartId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ quantity: newQuantity })
+            });
+            if (!res.ok) {
+                throw new Error('Update failed');
+            }
+            Swal.fire({
+                icon: 'success',
+                title: 'Updated!',
+                text: 'Cart item quantity updated.',
+                timer: 1500,
+                showConfirmButton: false
+            });
+            loadCart();
+        } catch (err) {
+            console.error("Error updating cart item:", err);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to update cart item quantity.'
+            });
+        }
+    }
+
+    // Remove an item from the cart
+    async function removeFromCart(cartId) {
+        try {
+            await fetch(`http://localhost:8081/api/cart/remove/${cartId}`, { method: 'DELETE' });
+            Swal.fire({
+                icon: 'success',
+                title: 'Removed!',
+                text: 'Item removed from cart.',
+                timer: 1500,
+                showConfirmButton: false
+            });
+            loadCart();
+        } catch (err) {
+            console.error("Error removing item:", err);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to remove item from cart.'
+            });
+        }
+    }
+
+    // Update wallet balance after checkout
     function updateWalletBalance() {
         const user = JSON.parse(localStorage.getItem('user'));
         if (!user || !user.id) return;
-
         fetch(`http://localhost:8081/api/wallet/customer/${user.id}`)
             .then(response => response.json())
             .then(balance => {
                 user.walletBalance = balance;
                 localStorage.setItem('user', JSON.stringify(user));
-                alert(`Wallet updated! New balance: $${balance.toFixed(2)}`);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Wallet Updated',
+                    text: `New balance: $${balance.toFixed(2)}`,
+                    timer: 1500,
+                    showConfirmButton: false
+                });
             })
-            .catch(error => console.error("Error updating wallet balance:", error));
+            .catch(error => {
+                console.error("Error updating wallet balance:", error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to update wallet balance.'
+                });
+            });
     }
 
-    // async function checkout() {
-    //     const user = JSON.parse(localStorage.getItem('user'));
-    //     try {
-    //         const res = await fetch(`http://localhost:8081/api/orders/place?customerId=${user.id}`, {
-    //             method: 'POST',
-    //             headers: { 'Content-Type': 'application/json' }
-    //         });
-    //         const order = await res.json();
-    //
-    //         if (order.success) {
-    //             alert("Order placed successfully!");
-    //             window.location.href = "orderHistory.html";
-    //         }
-    //     } catch (err) {
-    //         console.error("Error placing order:", err);
-    //         alert("Failed to place order.");
-    //     }
-    // }
-
-    // async function checkout() {
-    //     const user = JSON.parse(localStorage.getItem('user'));
-    //     // First, load the cart to check if there are items
-    //     try {
-    //         const res = await fetch(`http://localhost:8081/api/cart/customer/${user.id}`);
-    //         const cartItems = await res.json();
-    //         if (cartItems.length === 0) {
-    //             alert("Your cart is empty. Please add items before placing an order.");
-    //             return;
-    //         }
-    //     } catch (err) {
-    //         console.error("Error checking cart:", err);
-    //         alert("Failed to verify cart items.");
-    //         return;
-    //     }
-    //
-    //     // If cart is not empty, proceed to place the order
-    //     try {
-    //         const res = await fetch(`http://localhost:8081/api/orders/place?customerId=${user.id}`, {
-    //             method: 'POST',
-    //             headers: { 'Content-Type': 'application/json' }
-    //         });
-    //         const order = await res.json();
-    //         if(order.success){
-    //             alert("Order placed successfully!");
-    //             await loadCart();       // Refresh the cart
-    //             loadOrderHistory(); // Refresh order history
-    //             updateWalletBalance(); // Update wallet balance on UI
-    //             window.location.href = "orderHistory.html";
-    //         } else {
-    //             alert(order.message || "Failed to place order.");
-    //         }
-    //     } catch (err) {
-    //         console.error("Error placing order:", err);
-    //         alert("Failed to place order.");
-    //     }
-    // }
-
-
+    // Checkout: Place the order
     async function checkout() {
         const user = JSON.parse(localStorage.getItem('user'));
         try {
@@ -155,16 +204,82 @@
                 headers: { 'Content-Type': 'application/json' }
             });
             const order = await res.json();
-            alert("Order placed successfully!");
-            updateWalletBalance(); // Update wallet balance
-
-            window.location.href = "orderHistory.html";
+            Swal.fire({
+                icon: 'success',
+                title: 'Order Placed',
+                text: 'Order placed successfully!',
+                timer: 1500,
+                showConfirmButton: false
+            });
+            updateWalletBalance();
+            setTimeout(() => {
+                window.location.href = "orderHistory.html";
+            }, 3000);
         } catch (err) {
             console.error("Error placing order:", err);
-            alert("Failed to place order.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to place order.'
+            });
         }
     }
 
+    // Orders History Functions
+    document.addEventListener("DOMContentLoaded", function() {
+        loadOrders();
+    });
+
+    async function loadOrders() {
+        const user = JSON.parse(localStorage.getItem("user"));
+        try {
+            const res = await fetch(`http://localhost:8081/api/orders/customer/${user.id}`);
+            const orders = await res.json();
+            renderOrders(orders);
+        } catch (err) {
+            console.error("Error loading orders:", err);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to load order history.'
+            });
+        }
+    }
+
+    function renderOrders(orders) {
+        const container = document.getElementById("orderHistoryContainer");
+        if (!container) return;
+        container.innerHTML = "";
+        if (!orders || orders.length === 0) {
+            container.innerHTML = "<p>No orders found.</p>";
+            return;
+        }
+        orders.forEach(order => {
+            let detailsHtml = "";
+            if (order.orderDetails && order.orderDetails.length > 0) {
+                detailsHtml = '<ul class="list-group list-group-flush">';
+                order.orderDetails.forEach(detail => {
+                    detailsHtml += `<li class="list-group-item">
+                              ${detail.menuItem.name} - $${detail.price.toFixed(2)} (x${detail.quantity})
+                            </li>`;
+                });
+                detailsHtml += '</ul>';
+            }
+            const div = document.createElement("div");
+            div.className = "card mb-3 fade-in-up";
+            div.innerHTML = `
+          <div class="card-body">
+            <h5 class="card-title">Order #${order.id}</h5>
+            <p class="card-text">Total: $${order.total.toFixed(2)}</p>
+            <p class="card-text">Status: ${order.status}</p>
+            <p class="card-text">Order Date: ${new Date(order.orderDate).toLocaleString()}</p>
+            <p class="card-text">Remaining Wallet Balance: $${order.remainingWalletBalance !== null ? order.remainingWalletBalance.toFixed(2) : 'N/A'}</p>
+            ${detailsHtml}
+          </div>
+        `;
+            container.appendChild(div);
+        });
+    }
 </script>
 </body>
 </html>
