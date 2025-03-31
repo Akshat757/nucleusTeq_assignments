@@ -1,0 +1,57 @@
+# Project-Specific Files
+HELP.md
+target/
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# STS (Spring Tool Suite)
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# VS Code
+.vscode/
+
+# Maven
+.mvn/wrapper/maven-wrapper.jar
+
+# Compiled Files
+*.class
+*.jar
+*.war
+*.ear
+
+# Logs and Temp Files
+*.log
+*.tmp
+hs_err_pid*
+
+# OS-Specific Files
+.DS_Store
+Thumbs.db
+
+# Environment Variables
+.env
+
+# Sensitive Configuration Files
+src/main/resources/application.properties

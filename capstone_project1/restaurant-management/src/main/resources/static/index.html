@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Restaurant Management - Login & Register</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Global Styles -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Optional: Animate.css for extra animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Restaurant Management</a>
+</nav>
+<div class="container mt-5">
+    <!-- Nav Tabs for Login and Register -->
+    <ul class="nav nav-tabs" id="authTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="login-tab" data-toggle="tab" href="#loginPane" role="tab">Login</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="register-tab" data-toggle="tab" href="#registerPane" role="tab">Register</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="authTabContent">
+        <!-- Login Pane -->
+        <div class="tab-pane fade show active" id="loginPane" role="tabpanel">
+            <form id="loginForm" class="mt-4">
+                <div class="form-group">
+                    <label for="loginEmail">Email address</label>
+                    <input type="email" class="form-control" id="loginEmail" placeholder="Enter email" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" class="form-control" id="loginPassword" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-custom">Login</button>
+            </form>
+        </div>
+        <!-- Register Pane -->
+        <div class="tab-pane fade" id="registerPane" role="tabpanel">
+            <form id="registerForm" class="mt-4">
+                <div class="form-group">
+                    <label for="registerEmail">Email address</label>
+                    <input type="email" class="form-control" id="registerEmail" placeholder="Enter email" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" class="form-control" id="registerPassword" placeholder="Password" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerRole">Role</label>
+                    <select class="form-control" id="registerRole" required>
+                        <option value="CUSTOMER">Customer</option>
+                        <option value="OWNER">Owner</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-success btn-custom">Register</button>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- jQuery, Popper.js, Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Auth JS -->
+<script type="module" src="js/auth.js"></script>
+</body>
+</html>

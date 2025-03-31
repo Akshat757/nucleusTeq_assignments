@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Cart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/customer.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="customer-dashboard.html">Dashboard</a>
+    <a class="nav-link" href="index.html">Logout</a>
+</nav>
+<div class="container mt-4">
+    <h2>Your Cart</h2>
+    <div id="cartContainer">
+        <!-- Cart items rendered here -->
+    </div>
+    <h3 id="cartTotal">Total: $0.00</h3>
+    <button class="btn btn-primary" onclick="checkout()">Place Order</button>
+</div>
+<!-- jQuery and Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        loadCart();
+    });
+
+    async function loadCart() {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user || !user.id) {
+            alert("Please login first.");
+            window.location.href = "index.html";
+            return;
+        }
+        try {
+            const res = await fetch(`http://localhost:8081/api/cart/customer/${user.id}`);
+            const cartItems = await res.json();
+            renderCartItems(cartItems);
+        } catch (err) {
+            console.error("Error loading cart:", err);
+        }
+    }
+
+    function renderCartItems(items) {
+        const container = document.getElementById('cartContainer');
+        container.innerHTML = '';
+        let total = 0;
+        items.forEach(item => {
+            total += item.menuItem.price * item.quantity;
+            const div = document.createElement('div');
+            div.className = 'card mb-2';
+            div.innerHTML = `
+          <div class="card-body">
+            <h5 class="card-title">${item.menuItem.name}</h5>
+            <p class="card-text">Price: $${item.menuItem.price.toFixed(2)} x ${item.quantity}</p>
+            <button class="btn btn-danger" onclick="removeFromCart(${item.id})">Remove</button>
+          </div>
+        `;
+            container.appendChild(div);
+        });
+        document.getElementById('cartTotal').textContent = `Total: $${total.toFixed(2)}`;
+    }
+
+    async function removeFromCart(cartId) {
+        try {
+            await fetch(`http://localhost:8081/api/cart/remove/${cartId}`, { method: 'DELETE' });
+            loadCart();
+        } catch (err) {
+            console.error("Error removing item:", err);
+        }
+    }
+
+    function updateWalletBalance() {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user || !user.id) return;
+
+        fetch(`http://localhost:8081/api/wallet/customer/${user.id}`)
+            .then(response => response.json())
+            .then(balance => {
+                user.walletBalance = balance;
+                localStorage.setItem('user', JSON.stringify(user));
+                alert(`Wallet updated! New balance: $${balance.toFixed(2)}`);
+            })
+            .catch(error => console.error("Error updating wallet balance:", error));
+    }
+
+    // async function checkout() {
+    //     const user = JSON.parse(localStorage.getItem('user'));
+    //     try {
+    //         const res = await fetch(`http://localhost:8081/api/orders/place?customerId=${user.id}`, {
+    //             method: 'POST',
+    //             headers: { 'Content-Type': 'application/json' }
+    //         });
+    //         const order = await res.json();
+    //
+    //         if (order.success) {
+    //             alert("Order placed successfully!");
+    //             window.location.href = "orderHistory.html";
+    //         }
+    //     } catch (err) {
+    //         console.error("Error placing order:", err);
+    //         alert("Failed to place order.");
+    //     }
+    // }
+
+    // async function checkout() {
+    //     const user = JSON.parse(localStorage.getItem('user'));
+    //     // First, load the cart to check if there are items
+    //     try {
+    //         const res = await fetch(`http://localhost:8081/api/cart/customer/${user.id}`);
+    //         const cartItems = await res.json();
+    //         if (cartItems.length === 0) {
+    //             alert("Your cart is empty. Please add items before placing an order.");
+    //             return;
+    //         }
+    //     } catch (err) {
+    //         console.error("Error checking cart:", err);
+    //         alert("Failed to verify cart items.");
+    //         return;
+    //     }
+    //
+    //     // If cart is not empty, proceed to place the order
+    //     try {
+    //         const res = await fetch(`http://localhost:8081/api/orders/place?customerId=${user.id}`, {
+    //             method: 'POST',
+    //             headers: { 'Content-Type': 'application/json' }
+    //         });
+    //         const order = await res.json();
+    //         if(order.success){
+    //             alert("Order placed successfully!");
+    //             await loadCart();       // Refresh the cart
+    //             loadOrderHistory(); // Refresh order history
+    //             updateWalletBalance(); // Update wallet balance on UI
+    //             window.location.href = "orderHistory.html";
+    //         } else {
+    //             alert(order.message || "Failed to place order.");
+    //         }
+    //     } catch (err) {
+    //         console.error("Error placing order:", err);
+    //         alert("Failed to place order.");
+    //     }
+    // }
+
+
+    async function checkout() {
+        const user = JSON.parse(localStorage.getItem('user'));
+        try {
+            const res = await fetch(`http://localhost:8081/api/orders/place?customerId=${user.id}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const order = await res.json();
+            alert("Order placed successfully!");
+            updateWalletBalance(); // Update wallet balance
+
+            window.location.href = "orderHistory.html";
+        } catch (err) {
+            console.error("Error placing order:", err);
+            alert("Failed to place order.");
+        }
+    }
+
+</script>
+</body>
+</html>
