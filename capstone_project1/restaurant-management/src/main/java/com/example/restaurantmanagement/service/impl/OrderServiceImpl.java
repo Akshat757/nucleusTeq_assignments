@@ -105,4 +105,9 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
     }
+
+    @Override
+    public List<Order> getOrdersByOwner(Long ownerId) {
+        return orderRepository.findByRestaurantOwnerId(ownerId);
+    }
 }

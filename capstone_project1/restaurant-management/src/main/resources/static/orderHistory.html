@@ -7,42 +7,85 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/customer.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="customer-dashboard.html">Dashboard</a>
-    <a class="nav-link" href="index.html">Logout</a>
+    <a class="navbar-brand" href="#">Restaurant Management</a>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="cart.html">Cart</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="orderHistory.html">Order History</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">Logout</a>
+            </li>
+        </ul>
+    </div>
 </nav>
 <div class="container mt-4">
     <h2>Order History</h2>
     <div id="orderHistoryContainer">
         <!-- Orders will be rendered here -->
     </div>
+    <button id="loadMoreBtn" class="btn btn-primary mt-3" onclick="loadMoreOrders()">Load More Orders</button>
+    <button id="viewPreviousBtn" class="btn btn-secondary mt-3" onclick="viewPreviousOrders()" style="display: none;">back</button>
 </div>
+
 <!-- jQuery and Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
+    /* global Swal */
+    let orders = [];
+    let currentIndex = 0;
+    const ordersPerPage = 10;
+
     document.addEventListener('DOMContentLoaded', function() {
         loadOrders();
+        updateWalletBalance()
     });
 
     async function loadOrders() {
         const user = JSON.parse(localStorage.getItem('user'));
         try {
             const res = await fetch(`http://localhost:8081/api/orders/customer/${user.id}`);
-            const orders = await res.json();
-            renderOrders(orders);
+            if (!res.ok) throw new Error("Failed to fetch orders");
+            orders = await res.json();
+
+            // Sort orders by date (latest first)
+            orders.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
+
+            renderOrders();
         } catch (err) {
             console.error("Error loading orders:", err);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to load orders. Please try again later.'
+            });
         }
     }
 
-    function renderOrders(orders) {
+    function renderOrders() {
         const container = document.getElementById('orderHistoryContainer');
         container.innerHTML = '';
-        orders.forEach(order => {
+
+        const visibleOrders = orders.slice(currentIndex, currentIndex + ordersPerPage);
+        if (visibleOrders.length === 0) {
+            container.innerHTML = '<p>No orders found.</p>';
+            document.getElementById('loadMoreBtn').style.display = 'none';
+            return;
+        }
+
+        visibleOrders.forEach(order => {
+            checkAndUpdateOrderStatus(order);
+
             const orderDiv = document.createElement('div');
             orderDiv.className = 'card mb-3';
             let detailsHtml = '';
@@ -50,23 +93,47 @@
                 detailsHtml = '<ul class="list-group list-group-flush">';
                 order.orderDetails.forEach(detail => {
                     detailsHtml += `<li class="list-group-item">
-                              ${detail.menuItem.name} - $${detail.price.toFixed(2)} (x${detail.quantity})
-                            </li>`;
+                                      ${detail.menuItem.name} - $${detail.price.toFixed(2)} (x${detail.quantity})
+                                    </li>`;
                 });
                 detailsHtml += '</ul>';
             }
             orderDiv.innerHTML = `
-          <div class="card-body">
-            <h5 class="card-title">Order #${order.id}</h5>
-            <p class="card-text">Total: $${order.total.toFixed(2)}</p>
-            <p class="card-text">Status: ${order.status}</p>
-            <p class="card-text">Order Date: ${new Date(order.orderDate).toLocaleString()}</p>
-            <p class="card-text">Remaining Wallet Balance: $${order.remainingWalletBalance || 'N/A'}</p>
-            ${detailsHtml}
-          </div>
-        `;
+              <div class="card-body">
+                <h5 class="card-title">Order #${order.id}</h5>
+                <p class="card-text">Total: $${order.total.toFixed(2)}</p>
+                <p class="card-text">Status: ${order.status}</p>
+                <p class="card-text">Order Date: ${new Date(order.orderDate).toLocaleString()}</p>
+                ${detailsHtml}
+              </div>
+            `;
             container.appendChild(orderDiv);
         });
+
+        document.getElementById('loadMoreBtn').style.display = currentIndex + ordersPerPage < orders.length ? 'block' : 'none';
+        document.getElementById('viewPreviousBtn').style.display = currentIndex > 0 ? 'block' : 'none';
+    }
+
+    function loadMoreOrders() {
+        currentIndex += ordersPerPage;
+        renderOrders();
+    }
+
+    function viewPreviousOrders() {
+        currentIndex -= ordersPerPage;
+        if (currentIndex < 0) currentIndex = 0;
+        renderOrders();
+    }
+
+    function checkAndUpdateOrderStatus(order) {
+        const orderDate = new Date(order.orderDate);
+        const currentTime = new Date();
+        const timeDiff = (currentTime - orderDate) / (1000 * 60); // Minutes
+
+        if (timeDiff >= 10 && order.status !== 'Completed') {
+            order.status = 'Completed';
+            console.log(`Order #${order.id} status updated to Completed.`);
+        }
     }
 </script>
 </body>

@@ -7,4 +7,5 @@ public interface OrderService {
     Order placeOrder(Long customerId);
     List<Order> getOrdersByCustomer(Long customerId);
     Order getOrderById(Long orderId);
+    List<Order> getOrdersByOwner(Long ownerId);
 }

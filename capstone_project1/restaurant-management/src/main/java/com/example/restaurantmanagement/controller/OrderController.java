@@ -1,7 +1,6 @@
 package com.example.restaurantmanagement.controller;
 
 import com.example.restaurantmanagement.model.Order;
-import com.example.restaurantmanagement.model.User;
 import com.example.restaurantmanagement.service.OrderService;
 import com.example.restaurantmanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +37,16 @@ public class OrderController {
     @GetMapping("/{orderId}")
     public Order getOrderById(@PathVariable Long orderId) {
         return orderService.getOrderById(orderId);
+    }
+
+    // ✅ Get Orders by Owner
+    @GetMapping("/owner/{ownerId}")
+    public ResponseEntity<?> getOrdersByOwner(@PathVariable Long ownerId) {
+        try {
+            List<Order> orders = orderService.getOrdersByOwner(ownerId);
+            return new ResponseEntity<>(orders, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

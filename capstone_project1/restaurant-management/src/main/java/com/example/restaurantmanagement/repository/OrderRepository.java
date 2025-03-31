@@ -8,4 +8,5 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByCustomer_Id(Long customerId);
+    List<Order> findByRestaurantOwnerId(Long ownerId);
 }
