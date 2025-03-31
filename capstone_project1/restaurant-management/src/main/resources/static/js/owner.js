@@ -270,7 +270,7 @@ function renderMenuItems(items) {
                     <p class="card-text">${item.description || ""}</p>
                     <p class="card-text"><strong>$${item.price.toFixed(2)}</strong></p>
                     <button class="btn btn-sm btn-primary" onclick="editMenuItem(${item.id})">Edit</button>
-                    <button class="btn btn-sm btn-danger" onclick="confirmDeleteMenuItem(${item.id})">Delete</button>
+                    <button class="btn btn-sm btn-danger" onclick="deleteMenuItem(${item.id})">Delete</button>
                 </div>
             </div>
         `;
@@ -360,40 +360,39 @@ async function editMenuItem(menuItemId) {
     }
 }
 
-async function confirmDeleteMenuItem(menuItemId) {
-    const result = await Swal.fire({
+function deleteMenuItem(menuItemId) {
+    Swal.fire({
         title: 'Are you sure?',
-        text: "This menu item will be permanently deleted.",
+        text: 'You won\'t be able to revert this!',
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`${API_BASE}/menuitems/${menuItemId}`, {
+                method: 'DELETE'
+            })
+                .then(response => {
+                    if (response.ok) {
+                        Swal.fire('Deleted!', 'Menu item has been deleted.', 'success');
+                        location.reload();
+                    } else {
+                        return response.json().then(err => {
+                            throw new Error(err.message || 'Failed to delete menu item');
+                        }).catch(() => {
+                            throw new Error('Failed to delete menu item.');
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire('Error!', `Failed to delete menu item: ${error.message}`, 'error');
+                });
+        } else {
+            Swal.fire('Cancelled', 'The menu item is safe.', 'info');
+        }
     });
-    if (result.isConfirmed) {
-        await deleteMenuItem(menuItemId);
-    }
-}
-
-async function deleteMenuItem(menuItemId) {
-    try {
-        await apiDelete(`menuitems/${menuItemId}`);
-        const restaurantId = document.getElementById("restaurantSelect").value;
-        Swal.fire({
-            icon: 'success',
-            title: 'Deleted!',
-            text: 'Menu item deleted successfully!',
-            timer: 1500,
-            showConfirmButton: false
-        });
-        await loadMenuItems(restaurantId);
-    } catch (error) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: "Failed to delete menu item: " + (error.message || "Unknown error")
-        });
-    }
 }
 
 // --------------------
