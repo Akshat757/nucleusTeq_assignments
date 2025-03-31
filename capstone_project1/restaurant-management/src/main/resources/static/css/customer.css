@@ -7,14 +7,15 @@
 
 html, body {
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #fdfbfb, #ebedee);
-    color: #444;
+    background-image: linear-gradient(to right, #ff8177 0%, #ff867a 0%, #ff8c7f 21%, #f99185 52%, #cf556c 78%, #b12a5b 100%);
+    color: #333;
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
 /* Body Container */
 .container {
-    padding: 20px;
+    padding: 40px 20px;
     margin-top: 20px;
     max-width: 1200px;
     margin-left: auto;
@@ -24,172 +25,123 @@ html, body {
 
 /* Navbar */
 .navbar {
-    background-color: #009688;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 10px 20px;
+    background-color: #005f73;
+    padding: 15px 40px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .navbar-brand, .nav-link {
-    color: #fff !important;
+    color: #ffffff !important;
     font-weight: 600;
     transition: color 0.3s ease;
 }
 
 .navbar-brand:hover, .nav-link:hover {
-    color: #e0f2f1 !important;
+    color: #cdebf8 !important;
+}
+
+/* Responsive Navbar for Small Screens */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+    }
+    .nav-link {
+        margin: 10px 0;
+    }
 }
 
 /* Headings */
 h1, h2, h3, h4, h5 {
-    margin-bottom: 1rem;
-    color: #00796b;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+    color: #005f73;
 }
 
-/* Cards */
-.card {
-    background: #fff;
+/* Forms */
+form {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 2rem;
+    margin: 2rem auto;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    animation: fadeInUp 1s ease;
+}
+
+form label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+form input, form select, form button {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+form input:focus, form select:focus {
+    border-color: #00796b;
+    outline: none;
+    transform: scale(1.02);
+}
+
+form button {
+    background-color: #00796b;
+    color: white;
     border: none;
-    border-radius: 15px;
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-    animation: slideUp 0.8s ease-out;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
 }
 
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-}
-
-/* Card Images */
-.card-img-top {
-    height: 200px;
-    object-fit: cover;
+form button:hover {
+    background-color: #00695c;
+    transform: scale(1.05);
 }
 
 /* Buttons */
 .btn {
-    border-radius: 50px;
+    border-radius: 30px;
+    font-weight: 600;
+    padding: 12px 24px;
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .btn-primary {
     background-color: #00796b;
     border: none;
+    color: #fff;
 }
 
 .btn-primary:hover {
     background-color: #00695c;
-    transform: scale(1.05);
+    transform: scale(1.07);
 }
 
 .btn-danger {
-    background-color: #e57373;
-    border: none;
+    background-color: #e63946;
 }
 
 .btn-danger:hover {
-    background-color: #d32f2f;
-    transform: scale(1.05);
+    background-color: #c62828;
 }
 
 .btn-success {
-    background-color: #66bb6a;
-    border: none;
+    background-color: #2a9d8f;
 }
 
 .btn-success:hover {
-    background-color: #43a047;
-    transform: scale(1.05);
-}
-
-/* Forms */
-.form-control {
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    transition: border-color 0.3s ease;
-    background-color: #fdfdfd;
-}
-
-.form-control:focus {
-    border-color: #00796b;
-    outline: none;
-}
-
-/* Modals */
-.modal-content {
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-}
-
-.modal-header {
-    background-color: #00796b;
-    color: #fff;
-}
-
-.modal-body {
-    background-color: #fdfdfd;
-}
-
-/* Animations */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes slideUp {
-    from {
-        transform: translateY(30px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-/* Loading Spinner */
-.loader {
-    border: 8px solid rgba(0,0,0,0.1);
-    border-top: 8px solid #00796b;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    animation: spin 1s linear infinite;
-    margin: 50px auto;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Tables */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-th, td {
-    padding: 12px;
-    border: 1px solid #ddd;
-    text-align: left;
-}
-
-th {
-    background-color: #00796b;
-    color: #fff;
+    background-color: #21867b;
 }
 
 /* Utility Classes */
@@ -201,38 +153,53 @@ th {
     margin-top: 20px;
 }
 
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 992px) {
     .card-img-top {
         height: 180px;
     }
-    .navbar-brand {
-        font-size: 1.3rem;
-    }
 }
 
 @media (max-width: 768px) {
     .container {
-        padding: 10px;
-    }
-    .card {
-        margin-bottom: 1rem;
+        padding: 20px 10px;
     }
     .btn {
-        padding: 10px 20px;
-        font-size: 14px;
+        padding: 10px 18px;
     }
 }
 
 @media (max-width: 480px) {
     .navbar-brand {
-        font-size: 1.1rem;
-    }
-    h1, h2, h3, h4, h5 {
         font-size: 1.2rem;
+    }
+    h1, h2, h3 {
+        font-size: 1.4rem;
     }
     .btn {
         padding: 8px 16px;
-        font-size: 12px;
     }
 }

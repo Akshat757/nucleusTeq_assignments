@@ -1,4 +1,15 @@
+/* global Swal */
 import { apiGet } from "./api.js";
+
+// Update wallet balance globally
+function updateWalletBalance(newBalance) {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+        user.walletBalance = newBalance;
+        localStorage.setItem("user", JSON.stringify(user));
+        document.getElementById("walletDisplay").textContent = `Wallet: ${user.walletBalance} pts`;
+    }
+}
 
 document.addEventListener("DOMContentLoaded", async () => {
     // Load user info from localStorage
@@ -8,9 +19,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("walletDisplay").textContent = `Wallet: ${user.walletBalance} pts`;
     } else {
         window.location.href = "index.html"; // Redirect to login if not authenticated
+        return;
     }
 
-    // Load restaurants if restaurant-list exists
+    // Load restaurants if container exists
     const restaurantList = document.getElementById("restaurantsContainer");
     if (restaurantList) {
         await loadRestaurants();
@@ -23,6 +35,11 @@ async function loadRestaurants() {
         renderRestaurants(restaurants);
     } catch (error) {
         console.error('Error loading restaurants:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to load restaurants.',
+        });
     }
 }
 
@@ -40,26 +57,17 @@ function renderRestaurants(restaurants) {
         const col = document.createElement("div");
         col.className = "col-md-4 mb-3";
         col.innerHTML = `
-      <div class="card">
-        <img src="${restaurant.imageUrl || 'assets/images/default.jpg'}" class="card-img-top" alt="${restaurant.name}">
-        <div class="card-body">
-          <h5 class="card-title">${restaurant.name}</h5>
-          <p class="card-text">📍 ${restaurant.location}</p>
-          <a href="menu.html?restaurantId=${restaurant.id}" class="btn btn-primary">View Menu</a>
-        </div>
-      </div>
-    `;
+            <div class="card fade-in-up">
+                <img src="${restaurant.imageUrl || 'assets/images/default.jpg'}" class="card-img-top" alt="${restaurant.name}">
+                <div class="card-body">
+                    <h5 class="card-title">${restaurant.name}</h5>
+                    <p class="card-text">📍 ${restaurant.location}</p>
+                    <a href="menu.html?restaurantId=${restaurant.id}" class="btn btn-primary">View Menu</a>
+                </div>
+            </div>
+        `;
         container.appendChild(col);
     });
-
-    function updateWalletBalance(newBalance) {
-        const user = JSON.parse(localStorage.getItem("user"));
-        if (user) {
-            user.walletBalance = newBalance;
-            localStorage.setItem("user", JSON.stringify(user));
-            document.getElementById("walletDisplay").textContent = `Wallet: ${user.walletBalance} pts`;
-        }
-    }
-
-
 }
+
+
