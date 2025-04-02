@@ -1,6 +1,6 @@
 package com.example.restaurantmanagement.controller;
 
-import com.example.restaurantmanagement.model.Order;
+import com.example.restaurantmanagement.model.Orders;
 import com.example.restaurantmanagement.service.OrderService;
 import com.example.restaurantmanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class OrderController {
     @PostMapping("/place")
     public ResponseEntity<?> placeOrder(@RequestParam Long customerId) {
         try {
-            Order order = orderService.placeOrder(customerId);
+            Orders order = orderService.placeOrder(customerId);
             return new ResponseEntity<>(order, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -30,12 +30,12 @@ public class OrderController {
     }
 
     @GetMapping("/customer/{customerId}")
-    public List<Order> getOrdersByCustomer(@PathVariable Long customerId) {
+    public List<Orders> getOrdersByCustomer(@PathVariable Long customerId) {
         return orderService.getOrdersByCustomer(customerId);
     }
 
     @GetMapping("/{orderId}")
-    public Order getOrderById(@PathVariable Long orderId) {
+    public Orders getOrderById(@PathVariable Long orderId) {
         return orderService.getOrderById(orderId);
     }
 
@@ -43,7 +43,7 @@ public class OrderController {
     @GetMapping("/owner/{ownerId}")
     public ResponseEntity<?> getOrdersByOwner(@PathVariable Long ownerId) {
         try {
-            List<Order> orders = orderService.getOrdersByOwner(ownerId);
+            List<Orders> orders = orderService.getOrdersByOwner(ownerId);
             return new ResponseEntity<>(orders, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

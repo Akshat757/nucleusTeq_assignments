@@ -19,7 +19,7 @@ public class OrderDetail {
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false, referencedColumnName = "id")
     @JsonBackReference
-    private Order order;
+    private Orders order;
 
     @ManyToOne
     private MenuItem menuItem;

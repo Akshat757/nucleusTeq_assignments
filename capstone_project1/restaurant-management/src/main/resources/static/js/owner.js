@@ -181,22 +181,42 @@ async function editRestaurant(restaurantId) {
 }
 
 async function deleteRestaurant(restaurantId) {
-    if (confirm("Are you sure you want to delete this restaurant?")) {
+    const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+    });
+
+    if (result.isConfirmed) {
         try {
             const response = await fetch(`${API_BASE}/restaurants/${restaurantId}`, {
                 method: 'DELETE'
             });
-            // Check for HTTP OK and ignore the body if empty.
+
             if (!response.ok) {
                 throw new Error("Delete request failed");
             }
-            // No need to call response.json() here since the body is empty.
+
+            Swal.fire(
+                "Deleted!",
+                "The restaurant has been deleted.",
+                "success"
+            );
+
             await loadOwnerRestaurants();
             if (document.getElementById("restaurantSelect")) {
                 await loadOwnerRestaurantsForSelect();
             }
         } catch (error) {
-            alert("Failed to delete restaurant: " + error.message);
+            Swal.fire(
+                "Error!",
+                `Failed to delete restaurant: ${error.message}`,
+                "error"
+            );
         }
     }
 }
@@ -263,14 +283,18 @@ function renderMenuItems(items) {
         const div = document.createElement("div");
         div.className = "col-md-4 mb-3";
         div.innerHTML = `
-            <div class="card fade-in-up">
-                <img src="${item.imageUrl || 'assets/images/default.jpg'}" class="card-img-top" alt="${item.name}">
-                <div class="card-body">
-                    <h5 class="card-title">${item.name}</h5>
-                    <p class="card-text">${item.description || ""}</p>
-                    <p class="card-text"><strong>$${item.price.toFixed(2)}</strong></p>
-                    <button class="btn btn-sm btn-primary" onclick="editMenuItem(${item.id})">Edit</button>
-                    <button class="btn btn-sm btn-danger" onclick="deleteMenuItem(${item.id})">Delete</button>
+            <div class="menu-management-container">
+                <div class="card menu-management-card fade-in-up">
+                    <img src="${item.imageUrl || 'assets/images/default.jpg'}" class="card-img-top" alt="${item.name}">
+                    <div class="card-body">
+                        <h5 class="card-title">${item.name}</h5>
+                        <p class="card-text">${item.description || ""}</p>
+                        <p class="price">$${item.price.toFixed(2)}</p>
+                        <div class="button-group">
+                            <button class="btn btn-sm btn-primary" onclick="editMenuItem(${item.id})">Edit</button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteMenuItem(${item.id})">Delete</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         `;

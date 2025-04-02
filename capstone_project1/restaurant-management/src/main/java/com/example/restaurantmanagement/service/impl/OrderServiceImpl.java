@@ -28,8 +28,8 @@ public class OrderServiceImpl implements OrderService {
     private OrderDetailRepository orderDetailRepository;
 
     @Override
-    public Order placeOrder(Long customerId) {
-        User customer = userRepository.findById(customerId)
+    public Orders placeOrder(Long customerId) {
+        app_user customer = userRepository.findById(customerId)
                 .filter(user -> "CUSTOMER".equals(user.getRole()))
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
 
@@ -56,7 +56,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         // Create a new order
-        Order order = new Order();
+        Orders order = new Orders();
         order.setCustomer(customer);
         order.setRestaurant(restaurant);
         order.setOrderDate(LocalDateTime.now());
@@ -68,7 +68,7 @@ public class OrderServiceImpl implements OrderService {
         userRepository.save(customer);
 
         // Save order and flush immediately to get a valid order id
-        Order savedOrder = orderRepository.saveAndFlush(order);
+        Orders savedOrder = orderRepository.saveAndFlush(order);
 
         // Create order details for each cart item
         List<OrderDetail> orderDetailsList = new ArrayList<>();
@@ -96,18 +96,18 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public List<Order> getOrdersByCustomer(Long customerId) {
+    public List<Orders> getOrdersByCustomer(Long customerId) {
         return orderRepository.findByCustomer_Id(customerId);
     }
 
     @Override
-    public Order getOrderById(Long orderId) {
+    public Orders getOrderById(Long orderId) {
         return orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
     }
 
     @Override
-    public List<Order> getOrdersByOwner(Long ownerId) {
+    public List<Orders> getOrdersByOwner(Long ownerId) {
         return orderRepository.findByRestaurantOwnerId(ownerId);
     }
 }

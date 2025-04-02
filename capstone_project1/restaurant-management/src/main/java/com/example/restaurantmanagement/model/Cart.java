@@ -12,7 +12,7 @@ public class Cart {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User customer;
+    private app_user customer;
 
     @ManyToOne
     @JoinColumn(name = "menu_item_id", nullable = false)

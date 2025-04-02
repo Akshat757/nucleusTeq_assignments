@@ -1,6 +1,7 @@
 package com.example.restaurantmanagement.controller;
 
-import com.example.restaurantmanagement.model.User;
+//import com.example.restaurantmanagement.model.User;
+import com.example.restaurantmanagement.model.app_user;
 import com.example.restaurantmanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,12 +14,12 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/register")
-    public User register(@RequestBody User user) {
+    public app_user register(@RequestBody app_user user) {
         return userService.registerUser(user);
     }
 
     @PostMapping("/login")
-    public User login(@RequestBody User user) {
+    public app_user login(@RequestBody app_user user) {
         return userService.loginUser(user.getEmail(), user.getPassword());
     }
 

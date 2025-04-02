@@ -1,11 +1,11 @@
 package com.example.restaurantmanagement.service;
 
-import com.example.restaurantmanagement.model.Order;
+import com.example.restaurantmanagement.model.Orders;
 import java.util.List;
 
 public interface OrderService {
-    Order placeOrder(Long customerId);
-    List<Order> getOrdersByCustomer(Long customerId);
-    Order getOrderById(Long orderId);
-    List<Order> getOrdersByOwner(Long ownerId);
+    Orders placeOrder(Long customerId);
+    List<Orders> getOrdersByCustomer(Long customerId);
+    Orders getOrderById(Long orderId);
+    List<Orders> getOrdersByOwner(Long ownerId);
 }

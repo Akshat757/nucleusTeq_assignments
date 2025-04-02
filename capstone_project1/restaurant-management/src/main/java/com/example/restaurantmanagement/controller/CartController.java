@@ -3,7 +3,8 @@ package com.example.restaurantmanagement.controller;
 import com.example.restaurantmanagement.dto.CartDTO;
 import com.example.restaurantmanagement.model.Cart;
 import com.example.restaurantmanagement.model.MenuItem;
-import com.example.restaurantmanagement.model.User;
+//import com.example.restaurantmanagement.model.User;
+import com.example.restaurantmanagement.model.app_user;
 import com.example.restaurantmanagement.service.CartService;
 import com.example.restaurantmanagement.service.MenuItemService;
 import com.example.restaurantmanagement.service.UserService;
@@ -27,7 +28,7 @@ public class CartController {
     @PostMapping("/add")
     public Cart addCartItem(@RequestBody CartDTO cartDTO) {
         // Load the customer and menu item from the database
-        User customer = userService.getUserById(cartDTO.getCustomerId());
+        app_user customer = userService.getUserById(cartDTO.getCustomerId());
         if (customer == null) {
             throw new RuntimeException("Customer with ID " + cartDTO.getCustomerId() + " not found.");
         }

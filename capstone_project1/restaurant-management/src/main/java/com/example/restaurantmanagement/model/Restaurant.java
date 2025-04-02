@@ -22,10 +22,10 @@ public class Restaurant {
 
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
-    private User owner;
+    private app_user owner;
 
     // Omit menuItems from JSON responses by default.
-    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<MenuItem> menuItems;
 }

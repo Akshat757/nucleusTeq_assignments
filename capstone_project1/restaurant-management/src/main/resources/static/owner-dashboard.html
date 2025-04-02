@@ -12,36 +12,67 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item"><a class="nav-link" href="manageRestaurants.html">Manage Restaurants</a></li>
-            <li class="nav-item"><a class="nav-link" href="manageMenus.html">Manage Menus</a></li>
-            <li class="nav-item"><a class="nav-link" href="orders.html">Orders</a></li>
-            <li class="nav-item"><a class="nav-link" href="index.html">Logout</a></li>
-        </ul>
-</nav>
-
-<div class="container mt-4">
-    <h2>Welcome, <span id="ownerName"></span>!</h2>
-    <!-- Summary Cards -->
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card summary-card">
-                <div class="card-body">
-                    <h5 class="card-title">Restaurants Managed</h5>
-                    <p class="card-text" id="totalRestaurants">0</p>
+<div class="wrapper">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="logo">
+                <img src="images/logo/logo.webp" alt="Site Logo">
+                <span class="site-name">FoodEase</span>
+            </div>
+                <ul class="nav-links navbar-nav ml-auto ">
+                    <li class="nav-item"><a class="nav-link" href="manageRestaurants.html">Manage Restaurants</a></li>
+                    <li class="nav-item"><a class="nav-link" href="manageMenus.html">Manage Menus</a></li>
+                    <li class="nav-item"><a class="nav-link" href="orders.html">Orders</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html">Logout</a></li>
+                </ul>
+            <div class="menu-icon" onclick="toggleMenu()">☰</div>
+        </nav>
+    </header>
+<main class="main-content">
+    <div class="container mt-4">
+        <h2>Welcome, <span id="ownerName"></span>!</h2>
+        <!-- Summary Cards -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card summary-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Restaurants Managed</h5>
+                        <p class="card-text" id="totalRestaurants">0</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card summary-card">
-                <div class="card-body">
-                    <h5 class="card-title">Total Orders Received</h5>
-                    <p class="card-text" id="totalOrders">0</p>
+            <div class="col-md-6">
+                <div class="card summary-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Orders Received</h5>
+                        <p class="card-text" id="totalOrders">0</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</main>
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section about">
+                <h2>About FoodEase</h2>
+                <p>Your one-stop platform for managing restaurants, menus, and online food orders with ease.</p>
+            </div>
+
+            <div class="footer-section social">
+                <h2>Follow Us</h2>
+                <div class="social-icons">
+                    <img src="images/logo/facebook.png" alt="Facebook"></a>
+                    <img src="images/logo/twitter.png" alt="Twitter"></a>
+                    <img src="images/logo/instagram.png" alt="Instagram"></a>
+                    <img src="images/logo/linkedin.png" alt="LinkedIn"></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 FoodEase. All Rights Reserved.</p>
+        </div>
+    </footer>
 </div>
 
 <!-- jQuery and Bootstrap JS -->
@@ -49,6 +80,7 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="js/owner.js"></script>
+<script src="js/menu.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const user = JSON.parse(localStorage.getItem("user"));

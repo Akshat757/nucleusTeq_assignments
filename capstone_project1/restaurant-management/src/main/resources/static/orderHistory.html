@@ -11,22 +11,27 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Restaurant Management</a>
-    <div class="collapse navbar-collapse">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="cart.html">Cart</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="orderHistory.html">Order History</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="index.html">Logout</a>
-            </li>
-        </ul>
-    </div>
-</nav>
+<div class="wrapper">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="logo">
+                <img src="images/logo/logo.webp" alt="Site Logo">
+                <span class="site-name">FoodEase</span>
+            </div>
+            <ul class="nav-links navbar-nav ml-auto ">
+                <li class="nav-item">
+                    <a class="nav-link" href="cart.html">Cart</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="orderHistory.html">Order History</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Logout</a>
+            </ul>
+            <div class="menu-icon" onclick="toggleMenu()">☰</div>
+        </nav>
+    </header>
+    <main class="main-content">
 <div class="container mt-4">
     <h2>Order History</h2>
     <div id="orderHistoryContainer">
@@ -35,7 +40,29 @@
     <button id="loadMoreBtn" class="btn btn-primary mt-3" onclick="loadMoreOrders()">Load More Orders</button>
     <button id="viewPreviousBtn" class="btn btn-secondary mt-3" onclick="viewPreviousOrders()" style="display: none;">back</button>
 </div>
+</main>
+<footer>
+    <div class="footer-container">
+        <div class="footer-section about">
+            <h2>About FoodEase</h2>
+            <p>Your one-stop platform for managing restaurants, menus, and online food orders with ease.</p>
+        </div>
 
+        <div class="footer-section social">
+            <h2>Follow Us</h2>
+            <div class="social-icons">
+                <img src="images/logo/facebook.png" alt="Facebook"></a>
+                <img src="images/logo/twitter.png" alt="Twitter"></a>
+                <img src="images/logo/instagram.png" alt="Instagram"></a>
+                <img src="images/logo/linkedin.png" alt="LinkedIn"></a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2025 FoodEase. All Rights Reserved.</p>
+    </div>
+</footer>
+</div>
 <!-- jQuery and Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
