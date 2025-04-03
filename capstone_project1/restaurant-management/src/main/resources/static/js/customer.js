@@ -1,16 +1,6 @@
 /* global Swal */
 import { apiGet } from "./api.js";
 
-// Update wallet balance globally
-function updateWalletBalance(newBalance) {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user) {
-        user.walletBalance = newBalance;
-        localStorage.setItem("user", JSON.stringify(user));
-        document.getElementById("walletDisplay").textContent = `Wallet: ${user.walletBalance} pts`;
-    }
-}
-
 document.addEventListener("DOMContentLoaded", async () => {
     // Load user info from localStorage
     const user = JSON.parse(localStorage.getItem("user"));
