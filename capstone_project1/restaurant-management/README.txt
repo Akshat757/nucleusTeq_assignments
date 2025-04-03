@@ -29,3 +29,6 @@ Backend: Spring Boot (Java 17), Hibernate, PostgreSQL
 Frontend: HTML, CSS, JavaScript, Bootstrap, jQuery, SweetAlert2
 
 API Integration: RESTful API endpoints for user, restaurant, menu, cart, and order management
+
+License
+This project is licensed under the MIT License. See the LICENSE file for details.
