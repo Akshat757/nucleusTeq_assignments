@@ -9,8 +9,10 @@ import com.example.restaurantmanagement.service.CartService;
 import com.example.restaurantmanagement.service.MenuItemService;
 import com.example.restaurantmanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/cart")
@@ -44,6 +46,13 @@ public class CartController {
         cart.setQuantity(cartDTO.getQuantity());
 
         return cartService.addCartItem(cart);
+    }
+
+    @PutMapping("/update/{cartId}")
+    public ResponseEntity<String> updateCartItem(@PathVariable Long cartId, @RequestBody Map<String, Integer> request) {
+        int quantity = request.get("quantity");
+        cartService.updateCartQuantity(cartId, quantity);
+        return ResponseEntity.ok("Cart item updated successfully");
     }
 
     @GetMapping("/customer/{customerId}")

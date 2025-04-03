@@ -1,4 +1,27 @@
 /* ===========================
+   CSS Variables - New Color Palette
+=========================== */
+:root {
+    /* Primary & Accent Colors */
+    --primary: #D72638;          /* Crimson Red (Call to Action) */
+    --primary-deep: #B71C1C;      /* Deep Crimson (Header alternative) */
+    --secondary: #218380;        /* Forest Green (Navigation, Cards, Backgrounds) */
+    --accent: #F4A261;           /* Golden Yellow (Hover, Links, Alerts) */
+
+    /* Background & Text */
+    --background-light: #F8F1F1;  /* Ivory White (Light Mode Base) */
+    --body-bg-alt: #F1F8E9;       /* Light Sage Green (Optional Body Background) */
+    --text-color: #2B2D42;        /* Charcoal Black (For text and high contrast) */
+
+    /* Success & Error Messages */
+    --success: #2ECC71;
+    --error: #E63946;
+
+    /* Footer */
+    --footer-bg: #1E1E1E;         /* Dark Footer background */
+}
+
+/* ===========================
    Global Styles & Reset
 =========================== */
 * {
@@ -6,14 +29,17 @@
     margin: 0;
     padding: 0;
 }
-body{
-    background-image: linear-gradient(to right, #ff8177 0%, #ff867a 0%, #ff8c7f 21%, #f99185 52%, #cf556c 78%, #b12a5b 100%);
+
+body {
+    /* Updated background to a subtle gradient using primary & accent */
+    background-image: linear-gradient(to right, var(--primary), var(--accent));
 }
 
 html, body {
     font-family: 'Poppins', sans-serif;
-    background-color: #E0E0E0; /* Secondary: Light Gray */
-    color: #212121; /* Text: Dark Gray */
+    /* Option: switch background-color between Ivory White or Light Sage Green */
+    background-color: var(--background-light);
+    color: var(--text-color);
     min-height: 100vh;
     overflow-x: hidden;
 }
@@ -30,20 +56,11 @@ html, body {
 /* ===========================
    HEADER & NAVBAR
 =========================== */
-.navbar {
-    background-color: #212121; /* Primary: Green */
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    max-width: 1200px;
-    margin: auto;
-    padding: 10px 20px;
-    flex-wrap: wrap;
-}
-
+/* Centered and Rounded Navbar */
 header {
     width: 100%;
-    background-color: #212121; /* Primary: Green */
+    /* Use a header gradient (Deep Crimson to Crimson Red) */
+    background-image: linear-gradient(to right, var(--primary), var(--accent));
     color: #fff;
     position: sticky;
     top: 0;
@@ -51,6 +68,19 @@ header {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+.navbar {
+    background-color: #B71C1C; /* Deep Crimson */
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center Navbar */
+    max-width: 90%;
+    margin: auto;
+    padding: 15px 30px;
+    border-radius: 50px; /* Fully Rounded Corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    top: 15px;
+}
 
 /* Logo and Site Name */
 .navbar .logo {
@@ -64,7 +94,7 @@ header {
 }
 
 .navbar .logo .site-name {
-    font-size: 1.8rem;
+    font-size: 1.3rem;
     font-weight: bold;
 }
 
@@ -84,7 +114,7 @@ header {
 }
 
 .navbar .nav-links li a:hover {
-    color: #FFB400; /* Accent: Golden Yellow */
+    color: var(--accent);
 }
 
 /* Hamburger Icon (for Mobile) */
@@ -123,6 +153,10 @@ header {
     padding: 20px;
 }
 
+.owner-main-content{
+    margin-bottom: 150px;
+}
+
 /* Container for summary cards */
 .container {
     padding: 40px 20px;
@@ -145,7 +179,8 @@ header {
 /* Menu Card Styling */
 .menu-management-card {
     width: 300px;
-    background-color: #ffffff;
+    height: 500px;
+    background-color: var(--background-light);
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -164,7 +199,7 @@ header {
 /* Image Styling */
 .menu-management-card .card-img-top {
     width: 100%;
-    height: 180px;
+    height: 150px;
     object-fit: cover;
 }
 
@@ -184,7 +219,7 @@ header {
 .menu-management-card .card-title {
     font-size: 1.2rem;
     margin-bottom: 8px;
-    color: #333;
+    color: var(--text-color);
 }
 
 .menu-management-card .card-text {
@@ -197,17 +232,17 @@ header {
 .menu-management-card .price {
     font-size: 1.1rem;
     font-weight: bold;
-    color: #FF5722;
-    margin-bottom: 12px;
+    color: var(--accent);
+    margin-bottom: 5px;
 }
 
 /* Button Group */
 .menu-management-card .button-group {
     display: flex;
-    gap: 8px;
+    gap: 5px;
     width: 100%;
     justify-content: center;
-    padding-top: 10px; /* Adds spacing above buttons */
+    padding-top: 8px; /* Adds spacing above buttons */
 }
 
 /* Buttons */
@@ -220,32 +255,32 @@ header {
 
 /* Edit Button */
 .menu-management-card .btn-primary {
-    background-color: #007BFF;
+    background-color: var(--primary);
     border: none;
     transition: background 0.3s ease;
 }
 
 .menu-management-card .btn-primary:hover {
-    background-color: #0056b3;
+    /* Using a gradient hover effect */
+    background-image: linear-gradient(var(--primary), var(--accent));
 }
 
 /* Delete Button */
 .menu-management-card .btn-danger {
-    background-color: #DC3545;
+    background-color: var(--accent);
     border: none;
     transition: background 0.3s ease;
 }
 
 .menu-management-card .btn-danger:hover {
-    background-color: #A71D2A;
+    background-color: var(--error);
 }
-
 
 /* Restaurant Card Styling */
 .card.fade-in-up {
     height: 400px;
     width: 500px;               /* Fixed card width */
-    background-color: #ffffff;  /* Card background color */
+    background-color: var(--background-light);  /* Card background color */
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -268,19 +303,20 @@ header {
 /* Card Body */
 .card.fade-in-up .card-body {
     padding: 15px;
-    background-color: #E0E0E0;  /* Secondary color as background for the card content */
+    background-color: var(--background-light);
 }
 
 /* Card Title & Text */
 .card.fade-in-up .card-title {
     font-size: 1.2rem;
     margin-bottom: 10px;
-    color: #4CAF50;            /* Primary: Green */
+    color: var(--secondary);
 }
 
 .card.fade-in-up .card-text {
     font-size: 1rem;
-    color: #FFB400;            /* Accent: Golden Yellow */
+    color: var(--accent);
+    padding-bottom: 2px;
 }
 
 /* Button Group Adjustments (optional) */
@@ -288,10 +324,9 @@ header {
     margin-right: 5px;
 }
 
-
 /* Summary Cards */
 .card.summary-card {
-    background-color: #ffffff;
+    background-color: var(--background-light);
     border: none;
     border-radius: 20px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
@@ -310,22 +345,20 @@ header {
 .card.summary-card .card-title {
     font-size: 1.2rem;
     margin-bottom: 10px;
-    color: #4CAF50; /* Primary: Green */
+    color: var(--secondary);
 }
 
 .card.summary-card .card-text {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #FFB400; /* Accent: Golden Yellow */
+    color: var(--accent);
 }
-
-
 
 /* ===========================
    FOOTER
 =========================== */
 footer {
-    background: #212121; /* Text (Dark Gray) used as dark background */
+    background: var(--footer-bg);
     color: white;
     padding: 20px 0;
     margin-top: 40px;
@@ -384,7 +417,7 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 30px;
-    background-color: #ffffff;
+    background-color: var(--background-light);
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
@@ -396,7 +429,7 @@ th, td {
 }
 
 th {
-    background-color: #4CAF50; /* Primary: Green */
+    background-color: var(--secondary);
     color: white;
 }
 
@@ -430,13 +463,13 @@ form input, form select, form button {
 }
 
 form input:focus, form select:focus {
-    border-color: #4CAF50; /* Primary: Green */
+    border-color: var(--secondary);
     outline: none;
     transform: scale(1.02);
 }
 
 form button {
-    background-color: #4CAF50; /* Primary: Green */
+    background-color: var(--secondary);
     color: white;
     border: none;
     cursor: pointer;
@@ -445,7 +478,7 @@ form button {
 }
 
 form button:hover {
-    background-color: #388E3C; /* Darker shade of Primary */
+    background-color: #388E3C; /* Slightly darker shade for hover */
     transform: scale(1.05);
 }
 
@@ -460,31 +493,31 @@ form button:hover {
 }
 
 .btn-primary {
-    background-color: #4CAF50; /* Primary: Green */
+    background-color: var(--primary);
     border: none;
     color: #fff;
 }
 
 .btn-primary:hover {
-    background-color: #388E3C; /* Darker shade of Primary */
+    background-image: linear-gradient(var(--primary), var(--accent));
     transform: scale(1.07);
 }
 
 .btn-danger {
-    background-color: #FFB400; /* Accent: Golden Yellow */
-    color: #212121; /* Text: Dark Gray */
+    background-color: var(--accent);
+    color: var(--text-color);
 }
 
 .btn-danger:hover {
-    background-color: #E6A300; /* Slightly darker Accent */
+    background-color: var(--error);
 }
 
 .btn-success {
-    background-color: #4CAF50; /* Primary: Green */
+    background-color: var(--success);
 }
 
 .btn-success:hover {
-    background-color: #388E3C; /* Darker shade of Primary */
+    background-color: #388E3C; /* Slightly darker for hover */
 }
 
 .text-center {

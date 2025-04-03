@@ -1,4 +1,27 @@
 /* ===========================
+   CSS Variables - New Color Palette
+=========================== */
+:root {
+    /* Primary & Accent Colors */
+    --primary: #D72638;          /* Crimson Red (Call to Action) */
+    --primary-deep: #B71C1C;      /* Deep Crimson (Header alternative) */
+    --secondary: #218380;        /* Forest Green (Navigation, Cards, Backgrounds) */
+    --accent: #F4A261;           /* Golden Yellow (Hover, Links, Alerts) */
+
+    /* Background & Text */
+    --background-light: #F8F1F1;  /* Ivory White (Light Mode Base) */
+    --body-bg-alt: #F1F8E9;       /* Light Sage Green (Optional Body Background) */
+    --text-color: #2B2D42;        /* Charcoal Black (For text and high contrast) */
+
+    /* Success & Error Messages */
+    --success: #2ECC71;
+    --error: #E63946;
+
+    /* Footer */
+    --footer-bg: #1E1E1E;         /* Dark Footer background */
+}
+
+/* ===========================
    Global Styles & Reset
 =========================== */
 * {
@@ -8,13 +31,14 @@
 }
 
 body{
-    background-image: linear-gradient(to right, #ff8177 0%, #ff867a 0%, #ff8c7f 21%, #f99185 52%, #cf556c 78%, #b12a5b 100%);
+    background-image: linear-gradient(to right, var(--primary), var(--accent));
 }
 
 html, body {
     font-family: 'Poppins', sans-serif;
-    background-color: #E0E0E0; /* Secondary: Light Gray */
-    color: #212121; /* Text: Dark Gray */
+    /* Option: switch background-color between Ivory White or Light Sage Green */
+    background-color: var(--background-light);
+    color: var(--text-color);
     min-height: 100vh;
     overflow-x: hidden;
 }
@@ -31,9 +55,11 @@ html, body {
 /* ===========================
    HEADER & NAVBAR
 =========================== */
+/* Centered and Rounded Navbar */
 header {
     width: 100%;
-    background-color: #212121; /* Dark background for header */
+    /* Use a header gradient (Deep Crimson to Crimson Red) */
+    background-image: linear-gradient(to right, var(--primary), var(--accent));
     color: #fff;
     position: sticky;
     top: 0;
@@ -42,14 +68,17 @@ header {
 }
 
 .navbar {
-    background-color: #4CAF50; /* Primary: Green */
+    background-color: #B71C1C; /* Deep Crimson */
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    max-width: 1200px;
+    justify-content: center; /* Center Navbar */
+    max-width: 90%;
     margin: auto;
-    padding: 10px 20px;
-    flex-wrap: wrap;
+    padding: 15px 30px;
+    border-radius: 50px; /* Fully Rounded Corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    top: 15px;
 }
 
 /* Logo and Site Name */
@@ -64,7 +93,7 @@ header {
 }
 
 .navbar .logo .site-name {
-    font-size: 1.8rem;
+    font-size: 1.3rem;
     font-weight: bold;
 }
 
@@ -84,7 +113,7 @@ header {
 }
 
 .navbar .nav-links li a:hover {
-    color: #FFB400; /* Accent: Golden Yellow */
+    color: var(--accent);
 }
 
 /* Hamburger Icon (for Mobile) */
@@ -123,7 +152,7 @@ header {
     padding: 20px;
 }
 
-/* Body Container */
+/* Container for summary cards */
 .container {
     padding: 40px 20px;
     margin-top: 20px;

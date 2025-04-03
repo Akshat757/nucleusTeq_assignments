@@ -15,7 +15,7 @@ public class Orders {
 
     // Customer who placed the order
     @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private app_user customer;
 
     // Restaurant from which the order is placed
@@ -26,16 +26,24 @@ public class Orders {
     @Column(nullable = false)
     private double total;
 
+    @Column(name = "total_price", nullable = false)
+    private double totalPrice;
+
     @Column(nullable = false)
     private String status; // e.g., "Pending", "Completed", "Cancelled"
 
     private LocalDateTime orderDate = LocalDateTime.now();
 
+    // Computed getter for total price (converted to BigDecimal)
+    public Double getTotalPrice() {
+        return total;
+    }
+
     // Wallet balance remaining after order
     @Transient
     private Double remainingWalletBalance;
 
-    // Optional order details, if needed:
+    // order details, if needed:
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<OrderDetail> orderDetails;

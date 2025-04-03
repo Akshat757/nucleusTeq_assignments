@@ -44,4 +44,18 @@ public class CartServiceImpl implements CartService {
     public Cart getCartItemByCustomerAndMenuItem(Long customerId, Long menuItemId) {
         return cartRepository.findByCustomer_IdAndMenuItem_Id(customerId, menuItemId);
     }
+
+    @Override
+    public void updateCartQuantity(Long cartId, int quantity) {
+        Cart cartItem = cartRepository.findById(cartId)
+                .orElseThrow(() -> new RuntimeException("Cart item not found"));
+
+        if (quantity < 1) {
+            throw new IllegalArgumentException("Quantity must be at least 1");
+        }
+
+        cartItem.setQuantity(quantity);
+        cartRepository.save(cartItem);
+    }
+
 }

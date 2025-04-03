@@ -19,57 +19,86 @@
                 <img src="images/logo/logo.webp" alt="Site Logo">
                 <span class="site-name">FoodEase</span>
             </div>
-                <ul class="nav-links navbar-nav ml-auto ">
-                    <li class="nav-item"><a class="nav-link" href="manageRestaurants.html">Manage Restaurants</a></li>
-                    <li class="nav-item"><a class="nav-link" href="manageMenus.html">Manage Menus</a></li>
-                    <li class="nav-item"><a class="nav-link" href="orders.html">Orders</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.html">Logout</a></li>
-                </ul>
+            <ul class="nav-links navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="manageRestaurants.html">Manage Restaurants</a></li>
+                <li class="nav-item"><a class="nav-link" href="manageMenus.html">Manage Menus</a></li>
+                <li class="nav-item"><a class="nav-link" href="orders.html">Orders</a></li>
+                <li class="nav-item"><a class="nav-link" href="index.html">Logout</a></li>
+            </ul>
             <div class="menu-icon" onclick="toggleMenu()">☰</div>
         </nav>
     </header>
-<main class="main-content">
-    <div class="container mt-4">
+    <main class="main-content container mt-4 owner-main-content">
         <h2>Welcome, <span id="ownerName"></span>!</h2>
-        <!-- Summary Cards -->
+        <!-- Dashboard Summary Cards -->
         <div class="row">
-            <div class="col-md-6">
-                <div class="card summary-card">
+            <div class="col-md-4">
+                <div class="card text-white bg-primary mb-3">
                     <div class="card-body">
-                        <h5 class="card-title">Restaurants Managed</h5>
+                        <h5 class="card-title">Total Restaurants</h5>
                         <p class="card-text" id="totalRestaurants">0</p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="card summary-card">
+            <div class="col-md-4">
+                <div class="card text-white bg-success mb-3">
                     <div class="card-body">
-                        <h5 class="card-title">Total Orders Received</h5>
+                        <h5 class="card-title">Orders Received</h5>
                         <p class="card-text" id="totalOrders">0</p>
                     </div>
                 </div>
             </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-warning mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Revenue</h5>
+                        <p class="card-text" id="totalRevenue">$0</p>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-</main>
+
+        <!-- Additional Dashboard Content -->
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Top Performing Restaurants</h5>
+                        <ul id="topRestaurants" class="list-group">
+                            <!-- Dynamic Content: List of top restaurants -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Recent Orders</h5>
+                        <ul id="recentOrders" class="list-group">
+                            <!-- Dynamic Content: List of recent orders -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
     <footer>
         <div class="footer-container">
             <div class="footer-section about">
                 <h2>About FoodEase</h2>
-                <p>Your one-stop platform for managing restaurants, menus, and online food orders with ease.</p>
+                <p>FoodEase is your all-in-one solution for seamless restaurant management, menu customization, and hassle-free online food ordering. Whether you're a restaurant owner looking to manage your business efficiently or a customer searching for delicious meals, FoodEase provides a user-friendly platform with real-time updates and a visually appealing interface.</p>
             </div>
-
             <div class="footer-section social">
                 <h2>Follow Us</h2>
                 <div class="social-icons">
-                    <img src="images/logo/facebook.png" alt="Facebook"></a>
-                    <img src="images/logo/twitter.png" alt="Twitter"></a>
-                    <img src="images/logo/instagram.png" alt="Instagram"></a>
-                    <img src="images/logo/linkedin.png" alt="LinkedIn"></a>
+                    <a href="#"><img src="images/logo/facebook.png" alt="Facebook"></a>
+                    <a href="#"><img src="images/logo/twitter.png" alt="Twitter"></a>
+                    <a href="#"><img src="images/logo/instagram.png" alt="Instagram"></a>
+                    <a href="#"><img src="images/logo/linkedin.png" alt="LinkedIn"></a>
                 </div>
             </div>
         </div>
-        <div class="footer-bottom">
+        <div class="footer-bottom text-center">
             <p>© 2025 FoodEase. All Rights Reserved.</p>
         </div>
     </footer>
@@ -82,15 +111,134 @@
 <script src="js/owner.js"></script>
 <script src="js/menu.js"></script>
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", async () => {
         const user = JSON.parse(localStorage.getItem("user"));
-        if (user && user.email) {
-            document.getElementById("ownerName").textContent = user.email;
-        } else {
+        if (!user || !user.email) {
             window.location.href = "index.html";
+            return;
         }
-        loadOwnerRestaurantsSummary();
-        loadOwnerOrdersSummary();
+        document.getElementById("ownerName").textContent = user.email;
+
+        await loadOwnerRestaurantsSummary();
+        await loadOwnerOrdersSummary();
+    });
+
+    async function loadOwnerRestaurantsSummary() {
+        const user = JSON.parse(localStorage.getItem("user"));
+        try {
+            const response = await fetch(`http://localhost:8081/api/owner/dashboard/restaurants?ownerId=${user.id}`);
+            const summary = await response.json();
+            document.getElementById("totalRestaurants").innerText = summary.totalRestaurants;
+            // Render top restaurants list if needed
+            const topList = document.getElementById("topRestaurants");
+            topList.innerHTML = "";
+            if (summary.topRestaurants && summary.topRestaurants.length > 0) {
+                summary.topRestaurants.forEach(restaurant => {
+                    const li = document.createElement("li");
+                    li.className = "list-group-item";
+                    li.textContent = restaurant.name;
+                    topList.appendChild(li);
+                });
+            } else {
+                topList.innerHTML = "<li class='list-group-item'>No top restaurants.</li>";
+            }
+        } catch (error) {
+            console.error("Error fetching restaurant summary:", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to load restaurant summary.'
+            });
+        }
+    }
+
+    async function loadOwnerOrdersSummary() {
+        const user = JSON.parse(localStorage.getItem("user"));
+        try {
+            const response = await fetch(`http://localhost:8081/api/owner/dashboard/orders?ownerId=${user.id}`);
+            const summary = await response.json();
+            document.getElementById("totalOrders").innerText = summary.totalOrders;
+            document.getElementById("totalRevenue").innerText = `$${summary.totalRevenue.toFixed(2)}`;
+            // Render recent orders if needed
+            const recentList = document.getElementById("recentOrders");
+            recentList.innerHTML = "";
+            if (summary.recentOrders && summary.recentOrders.length > 0) {
+                summary.recentOrders.forEach(order => {
+                    const li = document.createElement("li");
+                    li.className = "list-group-item";
+                    li.textContent = `Order #${order.id} - $${order.totalPrice.toFixed(2)}`;
+                    recentList.appendChild(li);
+                });
+            } else {
+                recentList.innerHTML = "<li class='list-group-item'>No recent orders.</li>";
+            }
+        } catch (error) {
+            console.error("Error fetching order summary:", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to load order summary.'
+            });
+        }
+    }
+
+
+
+    // Sample data (Replace these with your actual API calls or data fetching logic)
+    const dashboardData = {
+        totalRestaurants: 0, // Replace with your data, e.g., fetchedRestaurants.length
+        totalOrders: 0,      // Replace with your data, e.g., fetchedOrders.length
+        totalRevenue: 0,     // Replace with your data, e.g., calculateRevenue()
+        topRestaurants: [],  // Replace with your data, e.g., ['Restaurant A', 'Restaurant B']
+        recentOrders: []     // Replace with your data, e.g., ['Order #123', 'Order #124']
+    };
+
+    function updateDashboard(data) {
+        // Update the summary cards
+        document.getElementById("totalRestaurants").innerText = data.totalRestaurants;
+        document.getElementById("totalOrders").innerText = data.totalOrders;
+        document.getElementById("totalRevenue").innerText = `$${data.totalRevenue}`;
+
+        // Update Top Performing Restaurants list
+        const topRestaurantsList = document.getElementById("topRestaurants");
+        topRestaurantsList.innerHTML = ""; // Clear existing content
+        if (data.topRestaurants.length > 0) {
+            data.topRestaurants.forEach((restaurant) => {
+                const li = document.createElement("li");
+                li.className = "list-group-item";
+                li.textContent = restaurant;
+                topRestaurantsList.appendChild(li);
+            });
+        } else {
+            const li = document.createElement("li");
+            li.className = "list-group-item";
+            li.textContent = "No top performing restaurants available.";
+            topRestaurantsList.appendChild(li);
+        }
+
+        // Update Recent Orders list
+        const recentOrdersList = document.getElementById("recentOrders");
+        recentOrdersList.innerHTML = ""; // Clear existing content
+        if (data.recentOrders.length > 0) {
+            data.recentOrders.forEach((order) => {
+                const li = document.createElement("li");
+                li.className = "list-group-item";
+                li.textContent = order;
+                recentOrdersList.appendChild(li);
+            });
+        } else {
+            const li = document.createElement("li");
+            li.className = "list-group-item";
+            li.textContent = "No recent orders available.";
+            recentOrdersList.appendChild(li);
+        }
+    }
+
+    // Simulate data fetch and update the dashboard
+    document.addEventListener("DOMContentLoaded", () => {
+        // Here you could fetch data from an API or localStorage
+        // For now, we're using the sample dashboardData defined above.
+        updateDashboard(dashboardData);
     });
 </script>
 </body>

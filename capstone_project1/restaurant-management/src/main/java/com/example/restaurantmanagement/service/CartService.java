@@ -9,4 +9,5 @@ public interface CartService {
     void deleteCartItem(Long id);
     List<Cart> getCartItemsByCustomer(Long customerId);
     Cart getCartItemByCustomerAndMenuItem(Long customerId, Long menuItemId);
+    void updateCartQuantity(Long cartId, int quantity);
 }
