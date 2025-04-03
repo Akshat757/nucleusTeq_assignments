@@ -1,5 +1,6 @@
 package com.example.restaurantmanagement.controller;
 
+import com.example.restaurantmanagement.dto.TopRestaurantDTO;
 import com.example.restaurantmanagement.model.Orders;
 import com.example.restaurantmanagement.service.OrderService;
 import com.example.restaurantmanagement.service.UserService;

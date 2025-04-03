@@ -31,50 +31,50 @@
     <main class="main-content container mt-4 owner-main-content">
         <h2>Welcome, <span id="ownerName"></span>!</h2>
         <!-- Dashboard Summary Cards -->
-        <div class="row">
+        <div class="row dashboard-stats">
             <div class="col-md-4">
-                <div class="card text-white bg-primary mb-3">
+                <div class="card text-white bg-primary mb-3 stat-card">
                     <div class="card-body">
                         <h5 class="card-title">Total Restaurants</h5>
-                        <p class="card-text" id="totalRestaurants">0</p>
+                        <p class="card-text stat-value" id="totalRestaurants">0</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card text-white bg-success mb-3">
+                <div class="card text-white bg-success mb-3 stat-card">
                     <div class="card-body">
                         <h5 class="card-title">Orders Received</h5>
-                        <p class="card-text" id="totalOrders">0</p>
+                        <p class="card-text stat-value" id="totalOrders">0</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card text-white bg-warning mb-3">
+                <div class="card text-white bg-warning mb-3 stat-card">
                     <div class="card-body">
                         <h5 class="card-title">Total Revenue</h5>
-                        <p class="card-text" id="totalRevenue">$0</p>
+                        <p class="card-text stat-value" id="totalRevenue">$0</p>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Additional Dashboard Content -->
-        <div class="row mt-3">
+        <div class="row mt-3 dashboard-content">
             <div class="col-md-6">
-                <div class="card mb-3">
+                <div class="card mb-3 content-card">
                     <div class="card-body">
                         <h5 class="card-title">Top Performing Restaurants</h5>
-                        <ul id="topRestaurants" class="list-group">
+                        <ul id="topRestaurants" class="list-group restaurant-list">
                             <!-- Dynamic Content: List of top restaurants -->
                         </ul>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card mb-3">
+                <div class="card mb-3 content-card">
                     <div class="card-body">
                         <h5 class="card-title">Recent Orders</h5>
-                        <ul id="recentOrders" class="list-group">
+                        <ul id="recentOrders" class="list-group order-list">
                             <!-- Dynamic Content: List of recent orders -->
                         </ul>
                     </div>
@@ -91,10 +91,10 @@
             <div class="footer-section social">
                 <h2>Follow Us</h2>
                 <div class="social-icons">
-                    <a href="#"><img src="images/logo/facebook.png" alt="Facebook"></a>
-                    <a href="#"><img src="images/logo/twitter.png" alt="Twitter"></a>
-                    <a href="#"><img src="images/logo/instagram.png" alt="Instagram"></a>
-                    <a href="#"><img src="images/logo/linkedin.png" alt="LinkedIn"></a>
+                    <a><img src="images/logo/facebook.png" alt="Facebook"></a>
+                    <a><img src="images/logo/twitter.png" alt="Twitter"></a>
+                    <a><img src="images/logo/instagram.png" alt="Instagram"></a>
+                    <a><img src="images/logo/linkedin.png" alt="LinkedIn"></a>
                 </div>
             </div>
         </div>
@@ -125,18 +125,46 @@
 
     async function loadOwnerRestaurantsSummary() {
         const user = JSON.parse(localStorage.getItem("user"));
+        if (!user || !user.id) {
+            console.error("User not found in localStorage");
+            Swal.fire({ icon: 'error', title: 'Error', text: 'User not logged in.' });
+            return;
+        }
+
         try {
-            const response = await fetch(`http://localhost:8081/api/owner/dashboard/restaurants?ownerId=${user.id}`);
-            const summary = await response.json();
-            document.getElementById("totalRestaurants").innerText = summary.totalRestaurants;
-            // Render top restaurants list if needed
+            console.log("Fetching top restaurants for Owner ID:", user.id);
+
+            const response = await fetch(`http://localhost:8081/api/owner/dashboard/top-restaurants?ownerId=${user.id}`);
+            console.log("Response Status:", response.status);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            // Log raw response text
+            const rawText = await response.text();
+            console.log("Raw API Response:", rawText);
+
+            // Try parsing JSON
+            const topRestaurants = JSON.parse(rawText);
+            console.log("Parsed JSON:", topRestaurants);
+
+            if (!Array.isArray(topRestaurants)) {
+                throw new Error("Invalid API response format. Expected a list.");
+            }
+
+            // Update total restaurant count
+            document.getElementById("totalRestaurants").innerText = topRestaurants.length;
+
+            // Update top restaurants list
             const topList = document.getElementById("topRestaurants");
             topList.innerHTML = "";
-            if (summary.topRestaurants && summary.topRestaurants.length > 0) {
-                summary.topRestaurants.forEach(restaurant => {
+
+            if (topRestaurants.length > 0) {
+                topRestaurants.forEach(restaurant => {
                     const li = document.createElement("li");
                     li.className = "list-group-item";
-                    li.textContent = restaurant.name;
+                    li.textContent = `${restaurant.name} - Orders: ${restaurant.orderCount}`;
                     topList.appendChild(li);
                 });
             } else {
@@ -144,13 +172,12 @@
             }
         } catch (error) {
             console.error("Error fetching restaurant summary:", error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Failed to load restaurant summary.'
-            });
+            Swal.fire({ icon: 'error', title: 'Error', text: 'Failed to load restaurant summary. Please try again later.' });
         }
     }
+
+
+
 
     async function loadOwnerOrdersSummary() {
         const user = JSON.parse(localStorage.getItem("user"));
@@ -159,11 +186,17 @@
             const summary = await response.json();
             document.getElementById("totalOrders").innerText = summary.totalOrders;
             document.getElementById("totalRevenue").innerText = `$${summary.totalRevenue.toFixed(2)}`;
+
+            // Get the 3 recent orders
+            const recentOrders = summary.recentOrders
+                .sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate)) // Sort by date (latest first)
+                .slice(0, 3);
+
             // Render recent orders if needed
             const recentList = document.getElementById("recentOrders");
             recentList.innerHTML = "";
-            if (summary.recentOrders && summary.recentOrders.length > 0) {
-                summary.recentOrders.forEach(order => {
+            if (recentOrders.length > 0) {
+                recentOrders.forEach(order => {
                     const li = document.createElement("li");
                     li.className = "list-group-item";
                     li.textContent = `Order #${order.id} - $${order.totalPrice.toFixed(2)}`;

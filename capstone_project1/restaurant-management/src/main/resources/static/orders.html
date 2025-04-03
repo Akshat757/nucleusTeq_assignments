@@ -30,7 +30,7 @@
 <main class="main-content">
 <div class="container mt-4">
     <h2>Orders</h2>
-    <div id="ordersContainer">
+    <div id="orderHistoryContainer">
         <!-- Orders will be rendered here -->
     </div>
     <button id="loadMoreBtn" class="btn btn-primary mt-3" onclick="loadMoreOrders()">Load More Orders</button>
@@ -47,10 +47,10 @@
         <div class="footer-section social">
             <h2>Follow Us</h2>
             <div class="social-icons">
-                <img src="images/logo/facebook.png" alt="Facebook"></a>
-                <img src="images/logo/twitter.png" alt="Twitter"></a>
-                <img src="images/logo/instagram.png" alt="Instagram"></a>
-                <img src="images/logo/linkedin.png" alt="LinkedIn"></a>
+                <a><img src="images/logo/facebook.png" alt="Facebook"></a>
+                <a><img src="images/logo/twitter.png" alt="Twitter"></a>
+                <a><img src="images/logo/instagram.png" alt="Instagram"></a>
+                <a><img src="images/logo/linkedin.png" alt="LinkedIn"></a>
             </div>
         </div>
     </div>
@@ -102,52 +102,46 @@
     }
 
     function renderOrders() {
-        const container = document.getElementById("ordersContainer");
-        container.innerHTML = "";
+        const container = document.getElementById('orderHistoryContainer');
+        container.innerHTML = '';
 
         const visibleOrders = orders.slice(currentIndex, currentIndex + ordersPerPage);
         if (visibleOrders.length === 0) {
-            container.innerHTML = "<p>No orders found.</p>";
-            document.getElementById("loadMoreBtn").style.display = "none";
+            container.innerHTML = '<p>No orders found.</p>';
+            document.getElementById('loadMoreBtn').style.display = 'none';
             return;
         }
 
-        visibleOrders.forEach((order) => {
+        visibleOrders.forEach(order => {
             checkAndUpdateOrderStatus(order);
 
-            const orderDiv = document.createElement("div");
-            orderDiv.className = "card mb-3";
-
-            let detailsHtml = "";
+            const orderDiv = document.createElement('div');
+            orderDiv.className = 'card mb-3';
+            let detailsHtml = '';
             if (order.orderDetails && order.orderDetails.length > 0) {
-                detailsHtml = "<ul class='list-group list-group-flush'>";
-                order.orderDetails.forEach((detail) => {
-                    detailsHtml += `<li class='list-group-item'>
-                              ${detail.menuItem.name} - $${detail.price.toFixed(2)} (x${detail.quantity})
-                            </li>`;
+                detailsHtml = '<ul class="list-group list-group-flush">';
+                order.orderDetails.forEach(detail => {
+                    detailsHtml += `<li class="list-group-item menu-item-list">
+                                      ${detail.menuItem.name} - $${detail.price.toFixed(2)} (x${detail.quantity})
+                                    </li>`;
                 });
-                detailsHtml += "</ul>";
+                detailsHtml += '</ul>';
             }
-
             orderDiv.innerHTML = `
-          <div class="card-body">
-            <h5 class="card-title">Order #${order.id}</h5>
-            <p class="card-text">Customer ID: ${order.customer?.id || "Unknown"}</p>
-            <p class="card-text">Total: $${order.total.toFixed(2)}</p>
-            <p class="card-text">Status: ${order.status}</p>
-            <p class="card-text">Order Date: ${new Date(order.orderDate).toLocaleString()}</p>
-            ${detailsHtml}
-          </div>
-        `;
+              <div class="card-body order-history-card">
+                <h5 class="card-title">Order #${order.id}</h5>
+                <p class="card-text">Total: $${order.total.toFixed(2)}</p>
+                <p class="card-text">Status: ${order.status}</p>
+                <p class="card-text">Order Date: ${new Date(order.orderDate).toLocaleString()}</p>
+                ${detailsHtml}
+              </div>
+            `;
             container.appendChild(orderDiv);
         });
 
-        document.getElementById("loadMoreBtn").style.display =
-            currentIndex + ordersPerPage < orders.length ? "block" : "none";
-        document.getElementById("viewPreviousBtn").style.display =
-            currentIndex > 0 ? "block" : "none";
+        document.getElementById('loadMoreBtn').style.display = currentIndex + ordersPerPage < orders.length ? 'block' : 'none';
+        document.getElementById('viewPreviousBtn').style.display = currentIndex > 0 ? 'block' : 'none';
     }
-
     function loadMoreOrders() {
         currentIndex += ordersPerPage;
         renderOrders();

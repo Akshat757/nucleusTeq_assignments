@@ -1,9 +1,11 @@
 package com.example.restaurantmanagement.controller;
 
+import com.example.restaurantmanagement.dto.TopRestaurantDTO;
 import com.example.restaurantmanagement.model.Orders;
 import com.example.restaurantmanagement.model.Restaurant;
 import com.example.restaurantmanagement.repository.OrderRepository;
 import com.example.restaurantmanagement.repository.RestaurantRepository;
+import com.example.restaurantmanagement.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,9 @@ public class OwnerDashboardController {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private OrderService orderService;
 
     // Endpoint to get restaurant summary for an owner
     @GetMapping("/restaurants")
@@ -65,4 +70,11 @@ public class OwnerDashboardController {
 
         return ResponseEntity.ok(summary);
     }
+
+    @GetMapping("/top-restaurants")
+    public ResponseEntity<List<TopRestaurantDTO>> getTopRestaurants(@RequestParam Long ownerId) {
+        List<TopRestaurantDTO> topRestaurants = orderService.getTopRestaurantsByOwner(ownerId);
+        return ResponseEntity.ok(topRestaurants);
+    }
+
 }

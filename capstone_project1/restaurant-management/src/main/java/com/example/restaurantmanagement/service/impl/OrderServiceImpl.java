@@ -1,16 +1,17 @@
 package com.example.restaurantmanagement.service.impl;
 
+import com.example.restaurantmanagement.dto.TopRestaurantDTO;
 import com.example.restaurantmanagement.model.*;
-import com.example.restaurantmanagement.repository.OrderDetailRepository;
-import com.example.restaurantmanagement.repository.OrderRepository;
-import com.example.restaurantmanagement.repository.CartRepository;
-import com.example.restaurantmanagement.repository.UserRepository;
+import com.example.restaurantmanagement.repository.*;
 import com.example.restaurantmanagement.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -26,6 +27,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderDetailRepository orderDetailRepository;
+
+    @Autowired
+    private RestaurantRepository RestaurantRepository;
 
     @Override
     public Orders placeOrder(Long customerId) {
@@ -111,4 +115,14 @@ public class OrderServiceImpl implements OrderService {
     public List<Orders> getOrdersByOwner(Long ownerId) {
         return orderRepository.findByRestaurantOwnerId(ownerId);
     }
+
+    public List<TopRestaurantDTO> getTopRestaurantsByOwner(Long ownerId) {
+        Pageable topThree = PageRequest.of(0, 3); // Limit to top 3 restaurants
+        List<Object[]> results = orderRepository.findTopRestaurantsByOwner(ownerId, topThree);
+
+        return results.stream()
+                .map(obj -> new TopRestaurantDTO((Long) obj[0], (String) obj[1], (Long) obj[2]))
+                .collect(Collectors.toList());
+    }
+
 }
