@@ -1,50 +1,147 @@
-/* General Styles */
+/* ===========================
+   CSS Variables - New Color Palette
+=========================== */
+:root {
+    /* Primary & Accent Colors */
+    --primary: #D72638;          /* Crimson Red (Call to Action) */
+    --primary-deep: #B71C1C;      /* Deep Crimson (Header alternative) */
+    --secondary: #218380;        /* Forest Green (Navigation, Cards, Backgrounds) */
+    --accent: #F4A261;           /* Golden Yellow (Hover, Links, Alerts) */
+
+    /* Background & Text */
+    --background-light: #F8F1F1;  /* Ivory White (Light Mode Base) */
+    --body-bg-alt: #F1F8E9;       /* Light Sage Green (Optional Body Background) */
+    --text-color: #2B2D42;        /* Charcoal Black (For text and high contrast) */
+
+    /* Success & Error Messages */
+    --success: #2ECC71;
+    --error: #E63946;
+
+    /* Footer */
+    --footer-bg: #1E1E1E;         /* Dark Footer background */
+}
+
+/* ===========================
+   Global Styles & Reset
+=========================== */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
+body{
+    background-image: linear-gradient(to right, var(--primary), var(--accent));
+}
+
 html, body {
     font-family: 'Poppins', sans-serif;
-    background-image: linear-gradient(to right, #ff8177 0%, #ff867a 0%, #ff8c7f 21%, #f99185 52%, #cf556c 78%, #b12a5b 100%);
-    color: #333;
+    /* Option: switch background-color between Ivory White or Light Sage Green */
+    background-color: var(--background-light);
+    color: var(--text-color);
     min-height: 100vh;
     overflow-x: hidden;
 }
 
-/* Navbar */
+/* ===========================
+   Wrapper (for sticky footer)
+=========================== */
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* ===========================
+   HEADER & NAVBAR
+=========================== */
+/* Centered and Rounded Navbar */
+header {
+    width: 100%;
+    /* Use a header gradient (Deep Crimson to Crimson Red) */
+    background-image: linear-gradient(to right, var(--primary), var(--accent));
+    color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
 .navbar {
-    background-color: #005f73;
-    padding: 15px 40px;
-    border-radius: 12px;
-    margin-bottom: 20px;
+    background-color: #B71C1C; /* Deep Crimson */
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center Navbar */
+    max-width: 90%;
+    margin: auto;
+    padding: 15px 30px;
+    border-radius: 50px; /* Fully Rounded Corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    top: 15px;
 }
 
-.navbar-brand {
-    color: #ffffff !important;
-    font-weight: 600;
+/* Logo and Site Name */
+.navbar .logo {
+    display: flex;
+    align-items: center;
+}
+
+.navbar .logo img {
+    height: 80px;
+    margin-right: 10px;
+}
+
+.navbar .logo .site-name {
     font-size: 1.8rem;
-    transition: color 0.3s ease;
+    font-weight: bold;
 }
 
-.navbar-brand:hover {
-    color: #cdebf8 !important;
+/* Navigation Links */
+.navbar .nav-links {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    gap: 20px;
 }
 
-/* Tab Navigation */
-.nav-tabs {
-    margin-bottom: 20px;
-    justify-content: center;
-}
-
-.nav-tabs .nav-link {
+.navbar .nav-links li a {
+    color: #ffffff;
+    text-decoration: none;
     font-weight: 600;
     transition: color 0.3s ease;
 }
 
-.nav-tabs .nav-link:hover {
-    color: #cdebf8 !important;
+.navbar .nav-links li a:hover {
+    color: var(--accent);
+}
+
+/* Hamburger Icon (for Mobile) */
+.navbar .menu-icon {
+    display: none;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+/* Responsive Navbar */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .navbar .nav-links {
+        width: 100%;
+        flex-direction: column;
+        display: none;
+        margin-top: 10px;
+    }
+    .navbar .nav-links.active {
+        display: flex;
+    }
+    .navbar .menu-icon {
+        display: block;
+        align-self: flex-end;
+    }
 }
 
 /* Forms */
@@ -195,3 +292,60 @@ form button:hover {
         padding: 8px 16px;
     }
 }
+
+/* ===========================
+   FOOTER
+=========================== */
+footer {
+    background: #212121; /* Dark footer background */
+    color: white;
+    padding: 20px 0;
+    margin-top: 40px;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.footer-section {
+    padding: 10px;
+}
+
+.footer-section h2 {
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+}
+
+.footer-section p {
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.footer-section .social-icons {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.footer-section .social-icons img {
+    height: 30px;
+    transition: transform 0.3s ease;
+}
+
+.footer-section .social-icons img:hover {
+    transform: scale(1.1);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding: 10px 0;
+    border-top: 1px solid #555;
+    margin-top: 20px;
+    font-size: 0.85rem;
+}
+

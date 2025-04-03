@@ -145,6 +145,110 @@ header {
     }
 }
 
+#orderHistoryContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.list-group-flush .menu-item-list{
+    background-image: linear-gradient(60deg, #11FFBD, #AAFFA9, #11FFBD, #AAFFA9);
+    border-radius: 30px;
+}
+
+.mb-3 {
+    background: transparent;
+    border-color:  transparent;
+}
+
+/* Order History Card */
+.order-history-card {
+    background: linear-gradient(135deg, #11FFBD, #AAFFA9);
+    border-radius: 20px;
+    padding: 20px;
+    margin: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    max-width: 400px;
+    min-width: 320px;
+    overflow: hidden;
+    position: relative;
+
+}
+
+/* Hover Effect */
+.order-history-card:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, #0ee7a7, #88ff99);
+    border-color: #11FFBD;
+}
+
+/* Remove any white background issue */
+.order-history-card::before {
+    display: none; /* Ensure no white glow effect */
+}
+
+/* Header Styling */
+.order-history-card .card-title {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #064635;
+    margin-bottom: 12px;
+}
+
+/* Order Details Styling */
+.order-history-card .card-text {
+    font-size: 1rem;
+    color: #064635;
+    margin: 6px 0;
+}
+
+/* Order Status - Styled Differently */
+.order-history-card .card-text:nth-of-type(2) {
+    font-weight: bold;
+    color: #ff5722;
+}
+
+/* Date Styling */
+.order-history-card .card-text:nth-of-type(3) {
+    font-style: italic;
+    color: #555;
+}
+
+/* Order Details Section */
+.order-history-card .order-details {
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent to blend */
+    padding: 12px;
+    border-radius: 12px;
+    width: 90%;
+    margin-top: 12px;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .order-history-card {
+        width: 90%;
+        max-width: 350px;
+    }
+
+    .order-history-card .card-title {
+        font-size: 1.4rem;
+    }
+
+    .order-history-card .card-text {
+        font-size: 0.9rem;
+    }
+}
+
 /* ===========================
    MAIN CONTENT (Dashboard)
 =========================== */
@@ -275,6 +379,144 @@ header {
 .menu-management-card .btn-danger:hover {
     background-color: var(--error);
 }
+
+/* ======= Dashboard Stats Section ======= */
+/* ======= Dashboard Layout ======= */
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* First Row: 3 Columns (Total Restaurants, Orders Received, Total Revenue) */
+.dashboard-row-1 {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+/* Second Row: 2 Columns (Top Restaurants, Recent Orders) */
+.dashboard-row-2 {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+/* Each Stat Card */
+.stat-card {
+    flex: 1;
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+/* Hover Animation */
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
+}
+
+/* Light Reflection Effect */
+.stat-card::before {
+    content: "";
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 10%, transparent 70%);
+    top: -50%;
+    left: -50%;
+    transform: rotate(45deg);
+    animation: lightEffect 3s infinite linear;
+}
+
+/* Light Animation */
+@keyframes lightEffect {
+    0%, 100% { transform: rotate(0deg) translateY(0px); }
+    50% { transform: rotate(45deg) translateY(10px); }
+}
+
+/* Numbers Fade-in Effect */
+.stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    animation: fadeIn 1s ease-in-out;
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.5); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* ======= Content Cards Styling (For Top Restaurants & Recent Orders) ======= */
+.content-card {
+    flex: 1;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: linear-gradient(135deg, #f4f4f4, #eaeaea);
+}
+
+/* Hover Effect */
+.content-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+}
+
+/* ======= Lists Styling (for Top Restaurants & Recent Orders) ======= */
+.restaurant-list, .order-list {
+    max-height: 250px;
+    overflow-y: auto;
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Scrollbar Customization */
+.restaurant-list::-webkit-scrollbar,
+.order-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.restaurant-list::-webkit-scrollbar-thumb,
+.order-list::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.restaurant-list::-webkit-scrollbar-thumb:hover,
+.order-list::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* ======= Responsive Design - Keeping Required Layout ======= */
+@media (max-width: 992px) {
+    .dashboard-row-1, .dashboard-row-2 {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .stat-card {
+        width: 100%;
+    }
+
+    .content-card {
+        width: 100%;
+    }
+
+    .stat-value {
+        font-size: 1.8rem;
+    }
+}
+
+
 
 /* Restaurant Card Styling */
 .card.fade-in-up {
