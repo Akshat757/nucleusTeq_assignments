@@ -118,14 +118,14 @@
             if (order.orderDetails && order.orderDetails.length > 0) {
                 detailsHtml = '<ul class="list-group list-group-flush">';
                 order.orderDetails.forEach(detail => {
-                    detailsHtml += `<li class="list-group-item">
+                    detailsHtml += `<li class="list-group-item menu-item-list">
                                       ${detail.menuItem.name} - $${detail.price.toFixed(2)} (x${detail.quantity})
                                     </li>`;
                 });
                 detailsHtml += '</ul>';
             }
             orderDiv.innerHTML = `
-              <div class="card-body">
+              <div class="card-body order-history-card">
                 <h5 class="card-title">Order #${order.id}</h5>
                 <p class="card-text">Total: $${order.total.toFixed(2)}</p>
                 <p class="card-text">Status: ${order.status}</p>

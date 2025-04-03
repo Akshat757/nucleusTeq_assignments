@@ -1,5 +1,6 @@
 package com.example.restaurantmanagement.service.impl;
 
+import com.example.restaurantmanagement.dto.CartUpdateRequest;
 import com.example.restaurantmanagement.model.Cart;
 import com.example.restaurantmanagement.repository.CartRepository;
 import com.example.restaurantmanagement.service.CartService;
@@ -15,7 +16,6 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Cart addCartItem(Cart cart) {
-        // If the item is already in the cart, update the quantity.
         Cart existing = cartRepository.findByCustomer_IdAndMenuItem_Id(
                 cart.getCustomer().getId(), cart.getMenuItem().getId());
         if (existing != null) {
@@ -58,4 +58,32 @@ public class CartServiceImpl implements CartService {
         cartRepository.save(cartItem);
     }
 
+    // ✅ Get all cart items
+    @Override
+    public List<Cart> getAllCartItems() {
+        return cartRepository.findAll();
+    }
+
+    // ✅ Get cart item by ID
+    @Override
+    public Cart getCartItemById(Long cartId) {
+        return cartRepository.findById(cartId)
+                .orElseThrow(() -> new RuntimeException("Cart item not found"));
+    }
+
+    // ✅ Update multiple cart items in one request
+    @Override
+    public void updateCartItems(List<CartUpdateRequest> cartUpdates) {
+        for (CartUpdateRequest update : cartUpdates) {
+            Cart cartItem = cartRepository.findById(update.getCartId())
+                    .orElseThrow(() -> new RuntimeException("Cart item not found: " + update.getCartId()));
+
+            if (update.getQuantity() < 1) {
+                throw new IllegalArgumentException("Quantity must be at least 1 for cart item: " + update.getCartId());
+            }
+
+            cartItem.setQuantity(update.getQuantity());
+            cartRepository.save(cartItem);
+        }
+    }
 }

@@ -57,7 +57,11 @@ public class OrderServiceImpl implements OrderService {
             throw new RuntimeException("Insufficient wallet balance.");
         }
 
-        // Create new order
+        // Deduct wallet balance from customer & save immediately
+        customer.setWalletBalance(customer.getWalletBalance() - total);
+        userRepository.save(customer);  // ✅ Ensure balance is deducted in DB
+
+        // Create new order (WITHOUT setting order details yet)
         Orders order = new Orders();
         order.setCustomer(customer);
         order.setRestaurant(restaurant);
@@ -65,11 +69,7 @@ public class OrderServiceImpl implements OrderService {
         order.setTotal(total);
         order.setStatus("Pending");
 
-        // Deduct wallet balance from customer
-        customer.setWalletBalance(customer.getWalletBalance() - total);
-        userRepository.save(customer);
-
-        // Save order and flush to obtain order ID
+        // Save order & flush to obtain order ID
         Orders savedOrder = orderRepository.saveAndFlush(order);
 
         // Create order details for each cart item
@@ -82,13 +82,15 @@ public class OrderServiceImpl implements OrderService {
             orderDetail.setPrice(cart.getMenuItem().getPrice() * cart.getQuantity());
             orderDetailsList.add(orderDetail);
         }
-        orderDetailRepository.saveAll(orderDetailsList);
-        savedOrder.setOrderDetails(orderDetailsList);
 
-        // Set remaining wallet balance (transient, for response only)
+        // Save order details
+        orderDetailRepository.saveAll(orderDetailsList);
+
+        // Update order with order details and remaining balance
+        savedOrder.setOrderDetails(orderDetailsList);
         savedOrder.setRemainingWalletBalance(customer.getWalletBalance());
 
-        // Clear the customer's cart
+        // Clear the customer's cart (Only after everything is saved successfully)
         cartRepository.deleteAll(cartItems);
 
         return savedOrder;

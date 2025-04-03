@@ -1,6 +1,7 @@
 package com.example.restaurantmanagement.controller;
 
 import com.example.restaurantmanagement.dto.CartDTO;
+import com.example.restaurantmanagement.dto.CartUpdateRequest;
 import com.example.restaurantmanagement.model.Cart;
 import com.example.restaurantmanagement.model.MenuItem;
 //import com.example.restaurantmanagement.model.User;
@@ -29,7 +30,6 @@ public class CartController {
 
     @PostMapping("/add")
     public Cart addCartItem(@RequestBody CartDTO cartDTO) {
-        // Load the customer and menu item from the database
         app_user customer = userService.getUserById(cartDTO.getCustomerId());
         if (customer == null) {
             throw new RuntimeException("Customer with ID " + cartDTO.getCustomerId() + " not found.");
@@ -39,7 +39,6 @@ public class CartController {
             throw new RuntimeException("Menu item with ID " + cartDTO.getItemId() + " not found.");
         }
 
-        // Create and populate a Cart entity
         Cart cart = new Cart();
         cart.setCustomer(customer);
         cart.setMenuItem(menuItem);
@@ -63,5 +62,24 @@ public class CartController {
     @DeleteMapping("/remove/{id}")
     public void deleteCartItem(@PathVariable Long id) {
         cartService.deleteCartItem(id);
+    }
+
+    // ✅ Get all cart items
+    @GetMapping("/all")
+    public List<Cart> getAllCartItems() {
+        return cartService.getAllCartItems();
+    }
+
+    // ✅ Get cart item by ID
+    @GetMapping("/{cartId}")
+    public Cart getCartItemById(@PathVariable Long cartId) {
+        return cartService.getCartItemById(cartId);
+    }
+
+    // ✅ Update multiple cart items
+    @PutMapping("/update")
+    public ResponseEntity<String> updateCartItems(@RequestBody List<CartUpdateRequest> cartUpdates) {
+        cartService.updateCartItems(cartUpdates);
+        return ResponseEntity.ok("Cart items updated successfully");
     }
 }
