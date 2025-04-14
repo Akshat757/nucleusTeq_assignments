@@ -3,6 +3,11 @@ package com.example.restaurantmanagement.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+/**
+ * Entity representing a user in the system.
+ * It stores details like email, password, role, and wallet balance.
+ */
+
 @Entity
 @Data
 public class app_user {

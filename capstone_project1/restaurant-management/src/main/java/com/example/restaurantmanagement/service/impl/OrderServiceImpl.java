@@ -13,6 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of the OrderService interface to manage orders in the system.
+ * This class handles placing orders, retrieving orders, and analyzing top restaurants.
+ */
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -31,6 +35,15 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private RestaurantRepository RestaurantRepository;
 
+    /**
+     * Places an order for a customer, including validation of cart contents, wallet balance,
+     * and creation of the order and its details.
+     *
+     * @param customerId the ID of the customer placing the order
+     * @return the placed order with order details
+     * @throws RuntimeException if the cart is empty, contains items from multiple restaurants,
+     *                          or the customer has insufficient wallet balance
+     */
     @Override
     public Orders placeOrder(Long customerId) {
         // Fetch customer (ensure the role is CUSTOMER)
@@ -100,22 +113,47 @@ public class OrderServiceImpl implements OrderService {
         return savedOrder;
     }
 
+    /**
+     * Retrieves a list of orders placed by a specific customer.
+     *
+     * @param customerId the ID of the customer
+     * @return a list of orders placed by the customer
+     */
     @Override
     public List<Orders> getOrdersByCustomer(Long customerId) {
         return orderRepository.findByCustomer_Id(customerId);
     }
 
+    /**
+     * Retrieves an order by its ID.
+     *
+     * @param orderId the ID of the order
+     * @return the order with the specified ID
+     * @throws RuntimeException if the order is not found
+     */
     @Override
     public Orders getOrderById(Long orderId) {
         return orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
     }
 
+    /**
+     * Retrieves a list of orders for a restaurant owner.
+     *
+     * @param ownerId the ID of the restaurant owner
+     * @return a list of orders for the owner's restaurant(s)
+     */
     @Override
     public List<Orders> getOrdersByOwner(Long ownerId) {
         return orderRepository.findByRestaurantOwnerId(ownerId);
     }
 
+    /**
+     * Retrieves the top 3 restaurants by order volume for a specific restaurant owner.
+     *
+     * @param ownerId the ID of the restaurant owner
+     * @return a list of the top 3 restaurants, including their IDs, names, and order counts
+     */
     public List<TopRestaurantDTO> getTopRestaurantsByOwner(Long ownerId) {
         Pageable topThree = PageRequest.of(0, 3); // Limit to top 3 restaurants
         List<Object[]> results = orderRepository.findTopRestaurantsByOwner(ownerId, topThree);
@@ -124,5 +162,4 @@ public class OrderServiceImpl implements OrderService {
                 .map(obj -> new TopRestaurantDTO((Long) obj[0], (String) obj[1], (Long) obj[2]))
                 .collect(Collectors.toList());
     }
-
 }

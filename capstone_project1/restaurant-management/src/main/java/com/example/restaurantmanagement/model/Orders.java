@@ -6,6 +6,11 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Entity representing an order placed by a customer in a restaurant.
+ * It includes details about the customer, restaurant, total amount, order status, and order items.
+ */
+
 @Entity
 @Data
 public class Orders {

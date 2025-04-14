@@ -154,7 +154,7 @@ header {
 }
 
 .list-group-flush .menu-item-list{
-    background-image: linear-gradient(60deg, #11FFBD, #AAFFA9, #11FFBD, #AAFFA9);
+    /*background-image: linear-gradient(60deg, #11FFBD, #AAFFA9, #11FFBD, #AAFFA9);*/
     border-radius: 30px;
 }
 
@@ -165,7 +165,9 @@ header {
 
 /* Order History Card */
 .order-history-card {
-    background: linear-gradient(135deg, #11FFBD, #AAFFA9);
+    /*background: linear-gradient(135deg, #11FFBD, #AAFFA9);*/
+    background: floralwhite;
+    border-color: black;
     border-radius: 20px;
     padding: 20px;
     margin: 15px;
@@ -187,8 +189,9 @@ header {
 .order-history-card:hover {
     transform: translateY(-5px) scale(1.05);
     box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
-    background: linear-gradient(135deg, #0ee7a7, #88ff99);
-    border-color: #11FFBD;
+    background: floralwhite;
+    /*background: linear-gradient(135deg, #0ee7a7, #88ff99);*/
+    border-color: black;
 }
 
 /* Remove any white background issue */

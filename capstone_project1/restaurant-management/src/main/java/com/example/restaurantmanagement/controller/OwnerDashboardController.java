@@ -15,31 +15,36 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/owner/dashboard")
+@RequestMapping("/api/owner/dashboard") // Base path for owner dashboard operations
 public class OwnerDashboardController {
 
     @Autowired
-    private RestaurantRepository restaurantRepository;
+    private RestaurantRepository restaurantRepository; // Repository to fetch restaurant data
 
     @Autowired
-    private OrderRepository orderRepository;
+    private OrderRepository orderRepository; // Repository to fetch order data
 
     @Autowired
-    private OrderService orderService;
+    private OrderService orderService; // Service for order-related business logic
 
-    // Endpoint to get restaurant summary for an owner
+    /**
+     * Endpoint to retrieve a summary of restaurants for a given owner.
+     *
+     * @param ownerId ID of the restaurant owner
+     * @return summary containing total restaurants and a sorted list of top restaurants
+     */
     @GetMapping("/restaurants")
     public ResponseEntity<?> getRestaurantSummary(@RequestParam Long ownerId) {
-        // Fetch restaurants for the owner
+        // Fetch all restaurants owned by the specified owner
         List<Restaurant> restaurants = restaurantRepository.findByOwner_Id(ownerId);
-        int totalRestaurants = restaurants.size();
+        int totalRestaurants = restaurants.size(); // Count total restaurants
 
-        // (Optional) Calculate top-performing restaurants if needed
-        // For now, we return the list of restaurants sorted by name.
+        // Sort restaurants alphabetically by name
         List<Restaurant> topRestaurants = restaurants.stream()
                 .sorted((r1, r2) -> r1.getName().compareToIgnoreCase(r2.getName()))
                 .collect(Collectors.toList());
 
+        // Prepare response summary
         Map<String, Object> summary = new HashMap<>();
         summary.put("totalRestaurants", totalRestaurants);
         summary.put("topRestaurants", topRestaurants);
@@ -47,22 +52,28 @@ public class OwnerDashboardController {
         return ResponseEntity.ok(summary);
     }
 
-    // Endpoint to get orders summary for an owner
+    /**
+     * Endpoint to retrieve an orders summary for a given owner.
+     *
+     * @param ownerId ID of the restaurant owner
+     * @return summary containing total orders, total revenue, and recent orders
+     */
     @GetMapping("/orders")
     public ResponseEntity<?> getOrdersSummary(@RequestParam Long ownerId) {
-        // Fetch orders for restaurants owned by the given owner
+        // Fetch all orders associated with the owner's restaurants
         List<Orders> orders = orderRepository.findByRestaurantOwnerId(ownerId);
-        int totalOrders = orders.size();
+        int totalOrders = orders.size(); // Total number of orders
         double totalRevenue = orders.stream()
                 .mapToDouble(Orders::getTotalPrice)
-                .sum();
+                .sum(); // Calculate total revenue
 
-        // Sort orders by order date descending and limit to 5 recent orders
+        // Get the 5 most recent orders sorted by order date descending
         List<Orders> recentOrders = orders.stream()
                 .sorted((o1, o2) -> o2.getOrderDate().compareTo(o1.getOrderDate()))
                 .limit(5)
                 .collect(Collectors.toList());
 
+        // Prepare response summary
         Map<String, Object> summary = new HashMap<>();
         summary.put("totalOrders", totalOrders);
         summary.put("totalRevenue", totalRevenue);
@@ -71,6 +82,12 @@ public class OwnerDashboardController {
         return ResponseEntity.ok(summary);
     }
 
+    /**
+     * Endpoint to get top performing restaurants of an owner based on orders.
+     *
+     * @param ownerId ID of the restaurant owner
+     * @return list of TopRestaurantDTO containing top restaurants info
+     */
     @GetMapping("/top-restaurants")
     public ResponseEntity<List<TopRestaurantDTO>> getTopRestaurants(@RequestParam Long ownerId) {
         List<TopRestaurantDTO> topRestaurants = orderService.getTopRestaurantsByOwner(ownerId);

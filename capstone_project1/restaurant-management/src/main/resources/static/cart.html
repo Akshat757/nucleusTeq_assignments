@@ -70,6 +70,8 @@
 <script>
     /* global Swal */
     document.addEventListener('DOMContentLoaded', function() {
+        const user = JSON.parse(localStorage.getItem("user"));
+        document.getElementById("walletDisplay").textContent = `Wallet: ${user.walletBalance} pts`;
         loadCart();
     });
 
@@ -171,7 +173,6 @@
             return;
         }
         try {
-            // Assumes you have an endpoint for updating quantity; adjust URL as needed.
             const res = await fetch(`http://localhost:8081/api/cart/update/${cartId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
@@ -325,7 +326,6 @@
             <p class="card-text">Total: $${order.total.toFixed(2)}</p>
             <p class="card-text">Status: ${order.status}</p>
             <p class="card-text">Order Date: ${new Date(order.orderDate).toLocaleString()}</p>
-            <p class="card-text">Remaining Wallet Balance: $${order.remainingWalletBalance !== null ? order.remainingWalletBalance.toFixed(2) : 'N/A'}</p>
             ${detailsHtml}
           </div>
         `;

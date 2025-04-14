@@ -6,6 +6,10 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Entity representing the details of an order.
+ * It links each order with its respective menu items, quantity, and price.
+ */
 @Entity
 @Getter
 @Setter

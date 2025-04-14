@@ -3,6 +3,11 @@ package com.example.restaurantmanagement.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+/**
+ * Entity representing a shopping cart item for a customer.
+ * It stores the relationship between the customer, menu item, and quantity.
+ */
+
 @Entity
 @Data
 public class Cart {

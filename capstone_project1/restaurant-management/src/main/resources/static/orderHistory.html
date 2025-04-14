@@ -74,7 +74,7 @@
 
     document.addEventListener('DOMContentLoaded', function() {
         loadOrders();
-        updateWalletBalance()
+        // updateWalletBalance();
     });
 
     async function loadOrders() {
@@ -133,6 +133,7 @@
             orderDiv.innerHTML = `
               <div class="card-body order-history-card">
                 <h5 class="card-title">Order #${order.id}</h5>
+                <p class="card-text">Restaurant: ${order.restaurant ? order.restaurant.name : 'N/A'}</p>
                 <p class="card-text">Total: $${order.total.toFixed(2)}</p>
                 <p class="card-text">Status: ${order.status}</p>
                 <p class="card-text">Order Date: ${new Date(order.orderDate).toLocaleString()}</p>

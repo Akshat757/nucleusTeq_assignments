@@ -78,6 +78,8 @@
     }
 
     document.addEventListener('DOMContentLoaded', async function() {
+        const user = JSON.parse(localStorage.getItem("user"));
+        document.getElementById("walletDisplay").textContent = `Wallet: ${user.walletBalance} pts`;
         const restaurantId = getQueryParam('restaurantId');
         if (!restaurantId) {
             await Swal.fire({

@@ -134,6 +134,13 @@
         try {
             console.log("Fetching top restaurants for Owner ID:", user.id);
 
+            const res = await fetch(`http://localhost:8081/api/owner/dashboard/restaurants?ownerId=${user.id}`);
+            console.log("Response Status:", res.status);
+            const sum = await res.json();
+            // Update total restaurant count
+            // document.getElementById("totalRestaurants").innerText = topRestaurants.length;
+            document.getElementById("totalRestaurants").innerText = sum.totalRestaurants;
+
             const response = await fetch(`http://localhost:8081/api/owner/dashboard/top-restaurants?ownerId=${user.id}`);
             console.log("Response Status:", response.status);
 
@@ -153,8 +160,6 @@
                 throw new Error("Invalid API response format. Expected a list.");
             }
 
-            // Update total restaurant count
-            document.getElementById("totalRestaurants").innerText = topRestaurants.length;
 
             // Update top restaurants list
             const topList = document.getElementById("topRestaurants");
@@ -175,8 +180,6 @@
             Swal.fire({ icon: 'error', title: 'Error', text: 'Failed to load restaurant summary. Please try again later.' });
         }
     }
-
-
 
 
     async function loadOwnerOrdersSummary() {
@@ -215,64 +218,6 @@
         }
     }
 
-
-
-    // Sample data (Replace these with your actual API calls or data fetching logic)
-    const dashboardData = {
-        totalRestaurants: 0, // Replace with your data, e.g., fetchedRestaurants.length
-        totalOrders: 0,      // Replace with your data, e.g., fetchedOrders.length
-        totalRevenue: 0,     // Replace with your data, e.g., calculateRevenue()
-        topRestaurants: [],  // Replace with your data, e.g., ['Restaurant A', 'Restaurant B']
-        recentOrders: []     // Replace with your data, e.g., ['Order #123', 'Order #124']
-    };
-
-    function updateDashboard(data) {
-        // Update the summary cards
-        document.getElementById("totalRestaurants").innerText = data.totalRestaurants;
-        document.getElementById("totalOrders").innerText = data.totalOrders;
-        document.getElementById("totalRevenue").innerText = `$${data.totalRevenue}`;
-
-        // Update Top Performing Restaurants list
-        const topRestaurantsList = document.getElementById("topRestaurants");
-        topRestaurantsList.innerHTML = ""; // Clear existing content
-        if (data.topRestaurants.length > 0) {
-            data.topRestaurants.forEach((restaurant) => {
-                const li = document.createElement("li");
-                li.className = "list-group-item";
-                li.textContent = restaurant;
-                topRestaurantsList.appendChild(li);
-            });
-        } else {
-            const li = document.createElement("li");
-            li.className = "list-group-item";
-            li.textContent = "No top performing restaurants available.";
-            topRestaurantsList.appendChild(li);
-        }
-
-        // Update Recent Orders list
-        const recentOrdersList = document.getElementById("recentOrders");
-        recentOrdersList.innerHTML = ""; // Clear existing content
-        if (data.recentOrders.length > 0) {
-            data.recentOrders.forEach((order) => {
-                const li = document.createElement("li");
-                li.className = "list-group-item";
-                li.textContent = order;
-                recentOrdersList.appendChild(li);
-            });
-        } else {
-            const li = document.createElement("li");
-            li.className = "list-group-item";
-            li.textContent = "No recent orders available.";
-            recentOrdersList.appendChild(li);
-        }
-    }
-
-    // Simulate data fetch and update the dashboard
-    document.addEventListener("DOMContentLoaded", () => {
-        // Here you could fetch data from an API or localStorage
-        // For now, we're using the sample dashboardData defined above.
-        updateDashboard(dashboardData);
-    });
 </script>
 </body>
 </html>

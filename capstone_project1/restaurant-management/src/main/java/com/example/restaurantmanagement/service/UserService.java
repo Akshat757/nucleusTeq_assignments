@@ -1,6 +1,5 @@
 package com.example.restaurantmanagement.service;
 
-//import com.example.restaurantmanagement.model.User;
 import com.example.restaurantmanagement.model.app_user;
 
 public interface UserService {
