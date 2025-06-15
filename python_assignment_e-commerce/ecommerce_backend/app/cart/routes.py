@@ -61,6 +61,8 @@ def update_quantity(
     user = Depends(get_current_user)
 ):
     cart_item = db.query(cart_models.CartItem).filter_by(user_id=user.id, product_id=product_id).first()
+    if update.quantity <= 0:
+        raise HTTPException(400, "Quantity must be greater than zero")
     if not cart_item:
         raise HTTPException(status_code=404, detail="Item not found in cart")
     cart_item.quantity = update.quantity

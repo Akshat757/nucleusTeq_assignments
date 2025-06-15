@@ -32,7 +32,12 @@ def create_product(
     db.add(db_product)
     db.commit()
     db.refresh(db_product)
-    return db_product
+    return {
+        "success": True,
+        "message": "Product created successfully",
+        "data": db_product
+    }
+
 
 # GET ALL PRODUCTS (Admin only)
 @router.get("/", response_model=List[schemas.ProductOut])
@@ -69,6 +74,8 @@ def update_product(
         raise HTTPException(status_code=404, detail="Product not found.")
 
     update_data = updated.model_dump(exclude_unset=True)
+    if not update_data:
+        raise HTTPException(400, "No update fields provided.")
 
     if "price" in update_data and update_data["price"] <= 0:
         raise HTTPException(status_code=400, detail="Price must be greater than 0.")
@@ -81,7 +88,12 @@ def update_product(
 
     db.commit()
     db.refresh(product)
-    return product
+    return {
+        "success": True,
+        "message": "Product updated successfully",
+        "data": product
+    }
+
 
 # DELETE PRODUCT
 @router.delete("/{product_id}")
