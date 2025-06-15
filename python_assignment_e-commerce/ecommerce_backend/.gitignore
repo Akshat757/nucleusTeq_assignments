@@ -1,0 +1,58 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment
+.env
+.env.*
+
+# Virtual environment
+.venv
+venv/
+ENV/
+env/
+.venv/
+pip-selfcheck.json
+
+# VSCode
+.vscode/
+.history/
+
+# Pytest / test cache
+.pytest_cache/
+*.cover
+coverage.xml
+htmlcov/
+.cache/
+nosetests.xml
+*.log
+
+# SQLite database
+*.db
+*.sqlite3
+
+# Logs
+logs/
+*.log
+
+# Migrations (optional, if using Alembic)
+alembic/
+alembic.ini
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Postman files (optional, if generated)
+*.postman_collection.json
+
+# Uvicorn logs
+*.pid
+
+# pyright / mypy / pylance
+typings/
+.mypy_cache/
+.pytype/
+
+config.py
