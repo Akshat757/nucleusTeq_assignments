@@ -1,4 +1,5 @@
-
+from sqlalchemy import Column, String, DateTime
+from datetime import datetime
 from sqlalchemy import Column, Integer, String, Enum
 from app.core.database import Base
 import enum
@@ -15,3 +16,5 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
     role = Column(Enum(UserRole), default="user")
+    reset_token = Column(String, nullable=True)
+    token_expiry = Column(DateTime, nullable=True)
