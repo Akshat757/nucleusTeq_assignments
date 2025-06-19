@@ -28,6 +28,7 @@ def create_product(
     if product.stock < 0:
         raise HTTPException(status_code=400, detail="Stock cannot be negative.")
 
+    # Convert Pydantic model to dictionary, create Product model
     db_product = models.Product(**product.model_dump())
     db.add(db_product)
     db.commit()
@@ -47,6 +48,7 @@ def get_products(
     db: Session = Depends(get_db),
     user = Depends(admin_required)
 ):
+    # Return products, with pagination
     return db.query(models.Product).offset(skip).limit(limit).all()
 
 # GET PRODUCT BY ID
@@ -56,6 +58,7 @@ def get_product(
     db: Session = Depends(get_db),
     user = Depends(admin_required)
 ):
+    # Find product by ID
     product = db.query(models.Product).filter(models.Product.id == product_id).first()
     if not product:
         raise HTTPException(status_code=404, detail="Product not found.")
@@ -69,6 +72,7 @@ def update_product(
     db: Session = Depends(get_db),
     user = Depends(admin_required)
 ):
+    # Find product by ID
     product = db.query(models.Product).filter(models.Product.id == product_id).first()
     if not product:
         raise HTTPException(status_code=404, detail="Product not found.")
@@ -82,7 +86,7 @@ def update_product(
     if "stock" in update_data and update_data["stock"] < 0:
         raise HTTPException(status_code=400, detail="Stock cannot be negative.")
 
-    # Apply updates
+    # Update only provided fields
     for key, value in update_data.items():
         setattr(product, key, value)
 
@@ -102,6 +106,7 @@ def delete_product(
     db: Session = Depends(get_db),
     user = Depends(admin_required)
 ):
+    # Find product by ID
     product = db.query(models.Product).filter(models.Product.id == product_id).first()
     if not product:
         raise HTTPException(status_code=404, detail="Product not found.")

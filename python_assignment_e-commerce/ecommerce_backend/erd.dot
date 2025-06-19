@@ -1,0 +1,22 @@
+
+      graph {
+         graph [rankdir=LR];
+         node [label="\N",
+             shape=plaintext
+         ];
+         edge [color=gray50,
+             minlen=2,
+             style=dashed
+         ];
+      
+"cart" [label=<<FONT FACE="Helvetica"><TABLE BORDER="0" CELLBORDER="1" CELLPADDING="4" CELLSPACING="0"><TR><TD><B><FONT POINT-SIZE="16">cart</FONT></B></TD></TR><TR><TD ALIGN="LEFT" PORT="id"><u><FONT>id</FONT></u> <FONT> [INTEGER]</FONT> NOT NULL</TD></TR><TR><TD ALIGN="LEFT" PORT="product_id"><FONT>product_id</FONT> <FONT> [INTEGER]</FONT> NOT NULL</TD></TR><TR><TD ALIGN="LEFT" PORT="quantity"><FONT>quantity</FONT> <FONT> [INTEGER]</FONT> NOT NULL</TD></TR><TR><TD ALIGN="LEFT" PORT="user_id"><FONT>user_id</FONT> <FONT> [INTEGER]</FONT> NOT NULL</TD></TR></TABLE></FONT>>];
+"users" [label=<<FONT FACE="Helvetica"><TABLE BORDER="0" CELLBORDER="1" CELLPADDING="4" CELLSPACING="0"><TR><TD><B><FONT POINT-SIZE="16">users</FONT></B></TD></TR><TR><TD ALIGN="LEFT" PORT="id"><u><FONT>id</FONT></u> <FONT> [INTEGER]</FONT> NOT NULL</TD></TR><TR><TD ALIGN="LEFT" PORT="email"><FONT>email</FONT> <FONT> [VARCHAR]</FONT> NOT NULL</TD></TR><TR><TD ALIGN="LEFT" PORT="hashed_password"><FONT>hashed_password</FONT> <FONT> [VARCHAR]</FONT> NOT NULL</TD></TR><TR><TD ALIGN="LEFT" PORT="name"><FONT>name</FONT> <FONT> [VARCHAR]</FONT> NOT NULL</TD></TR><TR><TD ALIGN="LEFT" PORT="reset_token"><FONT>reset_token</FONT> <FONT> [VARCHAR]</FONT></TD></TR><TR><TD ALIGN="LEFT" PORT="role"><FONT>role</FONT> <FONT> [VARCHAR(5)]</FONT></TD></TR><TR><TD ALIGN="LEFT" PORT="token_expiry"><FONT>token_expiry</FONT> <FONT> [DATETIME]</FONT></TD></TR></TABLE></FONT>>];
+"products" [label=<<FONT FACE="Helvetica"><TABLE BORDER="0" CELLBORDER="1" CELLPADDING="4" CELLSPACING="0"><TR><TD><B><FONT POINT-SIZE="16">products</FONT></B></TD></TR><TR><TD ALIGN="LEFT" PORT="id"><u><FONT>id</FONT></u> <FONT> [INTEGER]</FONT> NOT NULL</TD></TR><TR><TD ALIGN="LEFT" PORT="category"><FONT>category</FONT> <FONT> [VARCHAR]</FONT></TD></TR><TR><TD ALIGN="LEFT" PORT="description"><FONT>description</FONT> <FONT> [VARCHAR]</FONT></TD></TR><TR><TD ALIGN="LEFT" PORT="image_url"><FONT>image_url</FONT> <FONT> [VARCHAR]</FONT></TD></TR><TR><TD ALIGN="LEFT" PORT="name"><FONT>name</FONT> <FONT> [VARCHAR]</FONT> NOT NULL</TD></TR><TR><TD ALIGN="LEFT" PORT="price"><FONT>price</FONT> <FONT> [FLOAT]</FONT> NOT NULL</TD></TR><TR><TD ALIGN="LEFT" PORT="stock"><FONT>stock</FONT> <FONT> [INTEGER]</FONT> NOT NULL</TD></TR></TABLE></FONT>>];
+"order_items" [label=<<FONT FACE="Helvetica"><TABLE BORDER="0" CELLBORDER="1" CELLPADDING="4" CELLSPACING="0"><TR><TD><B><FONT POINT-SIZE="16">order_items</FONT></B></TD></TR><TR><TD ALIGN="LEFT" PORT="id"><u><FONT>id</FONT></u> <FONT> [INTEGER]</FONT> NOT NULL</TD></TR><TR><TD ALIGN="LEFT" PORT="order_id"><FONT>order_id</FONT> <FONT> [INTEGER]</FONT></TD></TR><TR><TD ALIGN="LEFT" PORT="price_at_purchase"><FONT>price_at_purchase</FONT> <FONT> [FLOAT]</FONT> NOT NULL</TD></TR><TR><TD ALIGN="LEFT" PORT="product_id"><FONT>product_id</FONT> <FONT> [INTEGER]</FONT></TD></TR><TR><TD ALIGN="LEFT" PORT="quantity"><FONT>quantity</FONT> <FONT> [INTEGER]</FONT> NOT NULL</TD></TR></TABLE></FONT>>];
+"orders" [label=<<FONT FACE="Helvetica"><TABLE BORDER="0" CELLBORDER="1" CELLPADDING="4" CELLSPACING="0"><TR><TD><B><FONT POINT-SIZE="16">orders</FONT></B></TD></TR><TR><TD ALIGN="LEFT" PORT="id"><u><FONT>id</FONT></u> <FONT> [INTEGER]</FONT> NOT NULL</TD></TR><TR><TD ALIGN="LEFT" PORT="created_at"><FONT>created_at</FONT> <FONT> [DATETIME]</FONT></TD></TR><TR><TD ALIGN="LEFT" PORT="status"><FONT>status</FONT> <FONT> [VARCHAR(9)]</FONT></TD></TR><TR><TD ALIGN="LEFT" PORT="total_amount"><FONT>total_amount</FONT> <FONT> [FLOAT]</FONT> NOT NULL</TD></TR><TR><TD ALIGN="LEFT" PORT="user_id"><FONT>user_id</FONT> <FONT> [INTEGER]</FONT> NOT NULL</TD></TR></TABLE></FONT>>];
+"users":"id" -- "cart":"user_id" [taillabel=<<FONT>1</FONT>>,headlabel=<<FONT>0..N</FONT>>];
+"products":"id" -- "cart":"product_id" [taillabel=<<FONT>1</FONT>>,headlabel=<<FONT>0..N</FONT>>];
+"orders":"id" -- "order_items":"order_id" [taillabel=<<FONT>{0,1}</FONT>>,headlabel=<<FONT>0..N</FONT>>];
+"products":"id" -- "order_items":"product_id" [taillabel=<<FONT>{0,1}</FONT>>,headlabel=<<FONT>0..N</FONT>>];
+"users":"id" -- "orders":"user_id" [taillabel=<<FONT>1</FONT>>,headlabel=<<FONT>0..N</FONT>>];
+}

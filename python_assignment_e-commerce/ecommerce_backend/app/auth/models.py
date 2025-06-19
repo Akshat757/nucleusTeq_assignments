@@ -4,6 +4,7 @@ from sqlalchemy import Column, Integer, String, Enum
 from app.core.database import Base
 import enum
 
+# Enum class to restrict allowed user roles
 class UserRole(str, enum.Enum):
     admin = "admin"
     user = "user"
@@ -16,5 +17,5 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
     role = Column(Enum(UserRole), default="user")
-    reset_token = Column(String, nullable=True)
-    token_expiry = Column(DateTime, nullable=True)
+    reset_token = Column(String, nullable=True) # token for forgot-password feature
+    token_expiry = Column(DateTime, nullable=True) # expiry time of reset token
