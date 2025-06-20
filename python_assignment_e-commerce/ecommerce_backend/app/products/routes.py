@@ -8,7 +8,7 @@ from app.auth.utils import admin_required
 router = APIRouter(prefix="/admin/products", tags=["Admin Products"])
 
 # CREATE PRODUCT
-@router.post("/", response_model=schemas.ProductOut)
+@router.post("/", response_model=schemas.ProductResponse)
 def create_product(
     product: schemas.ProductCreate,
     db: Session = Depends(get_db),
@@ -36,7 +36,32 @@ def create_product(
     return {
         "success": True,
         "message": "Product created successfully",
-        "data": db_product
+        "data": db_product 
+    }
+
+# CREATE MULTIPLE PRODUCTS
+@router.post("/bulk", response_model=schemas.ProductBulkResponse)
+def create_multiple_products(
+    products: List[schemas.ProductCreate],
+    db: Session = Depends(get_db),
+    user = Depends(admin_required)
+):
+    db_products = []
+
+    for product in products:
+        existing = db.query(models.Product).filter(models.Product.name == product.name).first()
+        if existing:
+            raise HTTPException(status_code=400, detail=f"Product '{product.name}' already exists")
+        
+        db_product = models.Product(**product.model_dump())
+        db_products.append(db_product)
+
+    db.add_all(db_products)
+    db.commit()
+    return {
+        "success": True,
+        "message": "Product created successfully",
+        "data": db_products 
     }
 
 
@@ -65,7 +90,7 @@ def get_product(
     return product
 
 # UPDATE PRODUCT
-@router.put("/{product_id}", response_model=schemas.ProductOut)
+@router.put("/{product_id}", response_model=schemas.ProductResponse)
 def update_product(
     product_id: int,
     updated: schemas.ProductUpdate,
@@ -76,6 +101,9 @@ def update_product(
     product = db.query(models.Product).filter(models.Product.id == product_id).first()
     if not product:
         raise HTTPException(status_code=404, detail="Product not found.")
+
+    # if product.admin_id != user.id:
+    #     raise HTTPException(status_code=403, detail="You are not authorized to update this product.")
 
     update_data = updated.model_dump(exclude_unset=True)
     if not update_data:

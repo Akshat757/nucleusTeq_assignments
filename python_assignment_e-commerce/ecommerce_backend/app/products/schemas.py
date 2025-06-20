@@ -1,6 +1,7 @@
 # app/products/schemas.py
 from pydantic import BaseModel
 from typing import Optional
+from typing import List
 
 class ProductCreate(BaseModel):
     name: str
@@ -18,6 +19,7 @@ class ProductUpdate(BaseModel):
     category: Optional[str] = None
     image_url: Optional[str] = None
 
+
 class ProductOut(BaseModel):
     id: int
     name: str
@@ -26,6 +28,16 @@ class ProductOut(BaseModel):
     stock: int
     category: Optional[str]
     image_url: Optional[str]
+
+class ProductResponse(BaseModel):
+    success: bool
+    message: str
+    data: ProductOut
+
+class ProductBulkResponse(BaseModel):
+    success: bool
+    message: str
+    data: List[ProductOut]
 
     class Config:
         orm_mode = True
