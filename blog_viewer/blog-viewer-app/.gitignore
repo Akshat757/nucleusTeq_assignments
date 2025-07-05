@@ -1,0 +1,59 @@
+# Node.js
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Next.js build output
+.next
+out
+
+# Testing coverage
+coverage
+
+# Production
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs
+*.log
+
+# Mac system files
+.DS_Store
+
+# Optional: Vercel folder if using Vercel
+.vercel
+
+# Optional: Local next.config.js custom environment files
+next.config.local.js
+
+# Optional: Editor-specific files
+.vscode/
+.idea/
+*.swp
+
+# Optional: OS specific files
+Thumbs.db
+
+# Jest cache
+jest-cache
+jest-coverage
+
+# Optional: Storybook
+storybook-static
+
+# Optional: Ignore local types and build artifacts
+dist
+build
+
+# Optional: Optional log/debug folders
+debug
+temp
+
+# Optional: Ignore .eslintcache
+.eslintcache
